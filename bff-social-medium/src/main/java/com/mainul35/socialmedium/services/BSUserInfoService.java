@@ -31,9 +31,19 @@ public class BSUserInfoService {
     }
 
     public Mono<List<UserInfoResponse>> getUsers(Integer pageIdx, Integer itemsPerPage) {
-        return webClient.get().uri(String.format("?pageIdx=%s&itemsPerPage=%s", pageIdx, itemsPerPage))
-                    .retrieve()
-                    .bodyToMono(new ParameterizedTypeReference<>() {
-            });
+
+       return webClient.get().uri(uriBuilder -> uriBuilder
+                .path("/")
+               .queryParam("pageIdx", pageIdx)
+               .queryParam("itemsPerPage", itemsPerPage)
+               .build()
+       )
+               .retrieve()
+               .bodyToMono(new ParameterizedTypeReference<>() {});
+
+//        return webClient.get().uri(String.format("?pageIdx=%s&itemsPerPage=%s", pageIdx, itemsPerPage))
+//                    .retrieve()
+//                    .bodyToMono(new ParameterizedTypeReference<>() {
+//            });
     }
 }

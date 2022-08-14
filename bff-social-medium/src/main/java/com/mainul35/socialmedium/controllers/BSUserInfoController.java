@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "${crossOrigin}")
+@CrossOrigin(origins = "${cross.origin}")
 @RequestMapping("/userinfo/users")
 public class BSUserInfoController {
 
