@@ -21,7 +21,7 @@ public class UserConnectionController implements IConnectionController {
         this.userConnectionService = userConnectionService1;
     }
     @Override
-    public ResponseEntity<?> requestConnection(String userId, String connectionId) {
+    public ResponseEntity<UserConnectionInfoResponse> requestConnection(String userId, String connectionId) {
         var userConnection = userConnectionService.addConnection(userId, connectionId);
         UserConnectionInfoResponse response = mapUserConnectionEntityToDto(userConnection);
         return ResponseEntity.ok(response);
@@ -37,25 +37,25 @@ public class UserConnectionController implements IConnectionController {
     }
 
     @Override
-    public ResponseEntity<?> acceptConnection(String userId, String connectionId) {
+    public ResponseEntity<UserConnectionInfoResponse> acceptConnection(String userId, String connectionId) {
         var acceptedUserConnection = userConnectionService.acceptConnection(userId, connectionId);
         return ResponseEntity.ok(acceptedUserConnection);
     }
 
     @Override
-    public ResponseEntity<?> rejectConnection(String userId, String connectionId) {
+    public ResponseEntity<UserConnectionInfoResponse> rejectConnection(String userId, String connectionId) {
         var rejectedConnection = userConnectionService.rejectConnection(userId, connectionId);
         return ResponseEntity.ok(rejectedConnection);
     }
 
     @Override
-    public ResponseEntity<?> blockConnection(String userId, String connectionId) {
+    public ResponseEntity<UserConnectionInfoResponse> blockConnection(String userId, String connectionId) {
         var blockedConnection = userConnectionService.blockConnection(userId, connectionId);
         return ResponseEntity.ok(blockedConnection);
     }
 
     @Override
-    public ResponseEntity<?> unblockConnection(String userId, String connectionId) {
+    public ResponseEntity<UserConnectionInfoResponse> unblockConnection(String userId, String connectionId) {
         var unblockedConnection = userConnectionService.unblockConnection(userId, connectionId);
         return ResponseEntity.ok(unblockedConnection);
     }
