@@ -8,12 +8,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Service
+@Validated
 public class BSUserInfoService {
 
     private final WebClient webClient;
@@ -127,7 +130,7 @@ public class BSUserInfoService {
                 .bodyToMono(new ParameterizedTypeReference<>() {});
     }
 
-    public Mono<List<UserInfoResponse>> search(Filter filter) {
+    public Mono<List<UserInfoResponse>> search(@Valid Filter filter) {
         return webClient.post().uri(uriBuilder -> uriBuilder
                         .path("/search")
                         .build()

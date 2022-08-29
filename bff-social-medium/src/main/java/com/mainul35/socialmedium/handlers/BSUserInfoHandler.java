@@ -105,7 +105,7 @@ public class BSUserInfoHandler {
         var requestMono = request.bodyToMono(UserInfoRequest.class);
         return requestMono.flatMap(userInfoRequest -> bsUserInfoService
                 .createConnection(userInfoRequest)
-                .flatMap(resp -> ServerResponse.ok().bodyValue(resp)));
+                .flatMap(resp -> ServerResponse.ok().build()));
     }
 
     public Mono<ServerResponse> searchHandler(ServerRequest request) {
