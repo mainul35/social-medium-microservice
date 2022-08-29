@@ -32,4 +32,8 @@ export class UserInfoService {
   getGlobalUsers(id: string | undefined, currentPageIdx: number): Observable<UserConnectionModel[]> {
     return this.httpClient.get<UserConnectionModel[]>(environment.SERVER_URL + "users/"+ id +"/non-connected-users?pageIdx=" + currentPageIdx + "&itemsPerPage=10");
   }
+
+  registerUser(obj: any): Observable<any> {
+    return this.httpClient.post<any>(environment.SERVER_URL + "users/create", obj);
+  }
 }

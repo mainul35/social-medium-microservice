@@ -26,8 +26,6 @@ export class UserSearchComponent implements OnInit {
   }
 
   searchUser() {
-    console.log(this.field)
-    console.log(this.value)
 
     const filter = new FilterModel();
     filter.field = this.field

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {UserInfoModel} from "../../models/user-info.model";
+import {UserInfoService} from "../../services/user-info.service";
+import {Router} from "@angular/router";
 
 class ImageSnippet {
   constructor(public src: string, public file: File) {}
@@ -16,8 +18,10 @@ export class UserRegisterComponent implements OnInit {
   form !: FormGroup
   userInfo?: UserInfoModel
   selectedFile ?: ImageSnippet;
+  submitted = false;
+  loading = false
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private userInfoService: UserInfoService, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -31,12 +35,27 @@ export class UserRegisterComponent implements OnInit {
     })
   }
 
-  submitForm() {
-    console.log(this.form.get('firstName')?.value, this.form.get('surname')?.value)
-    console.log(this.form.get('profileImagePath')?.value)
+  get f() {
+    return this.form.controls;
   }
 
-  processFile(imageInput: any) {
+  submitForm() {
+    console.log(this.form.get('firstName')?.value, this.form.get('surname')?.value)
+
+    this.submitted = true;
+    if (this.form.invalid) {
+      return;
+    }
+    this.loading = true;
+    // @ts-ignore
+    this.userInfoService.registerUser(this.form.value)
+      .subscribe( (value) => {
+          console.log(value)
+        });
+
+  }
+
+/*  processFile(imageInput: any) {
     const file: File = imageInput.files[0];
     const reader = new FileReader();
 
@@ -54,5 +73,5 @@ export class UserRegisterComponent implements OnInit {
     });
 
     reader.readAsDataURL(file);
-  }
+  }*/
 }
