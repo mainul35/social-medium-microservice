@@ -55,6 +55,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         UserEntity userEntity = new UserEntity();
         BeanUtils.copyProperties(userInfoRequest, userEntity);
         userEntity.setId(UUID.randomUUID().toString());
+        userEntity.setProfileImagePath("https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745");
         var savedUser = userInfoRepository.save(userEntity);
         log.debug("Sending user object to exchange...");
         rabbitTemplate.convertAndSend(RabbitMQConfig.RMQ_NAME, savedUser.getId());
