@@ -1,0 +1,24 @@
+[
+  {
+    "roles": [
+      "USER"
+    ],
+    "username": "mainul_1",
+    "password": "secret"
+  },
+  {
+    "roles": [
+      "ADMIN"
+    ],
+    "username": "mainul_2",
+    "password": "secret"
+  },
+  {
+    "roles": [
+      "USER",
+      "ADMIN"
+    ],
+    "username": "mainul_3",
+    "password": "secret"
+  }
+]
