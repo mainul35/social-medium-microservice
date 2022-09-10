@@ -4,13 +4,14 @@ import {MutualTabsComponent} from "./components/mutual-tabs/mutual-tabs.componen
 import {NotFoundComponent} from "./components/not-found/not-found.component";
 import {HomepageComponent} from "./components/homepage/homepage.component";
 import {UserRegisterComponent} from "./components/user-register/user-register.component";
+import {LoginComponent} from "./components/login/login.component";
 
 const routes: Routes = [
-  {path: '', component: HomepageComponent},
+  {path: 'home', component: HomepageComponent},
   {path: 'register', component: UserRegisterComponent},
-  // {path: 'profile', component: ProfileComponent},
+  {path: 'login', component: LoginComponent},
   {path: 'mutuals', component: MutualTabsComponent},
-  // {path: 'blocks', component: BlockedComponent},
+  {path: '', redirectTo: '/home', pathMatch: 'full'},
   {path: '**', component: NotFoundComponent},
 ];
 

@@ -19,6 +19,7 @@ import { MutualTabsComponent } from './components/mutual-tabs/mutual-tabs.compon
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { BrowserUsersComponent } from './components/browser-users/browser-users.component';
+import {LoginComponent} from "./components/login/login.component";
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { BrowserUsersComponent } from './components/browser-users/browser-users.
     MutualTabsComponent,
     NotFoundComponent,
     HomepageComponent,
-    BrowserUsersComponent
+    BrowserUsersComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
