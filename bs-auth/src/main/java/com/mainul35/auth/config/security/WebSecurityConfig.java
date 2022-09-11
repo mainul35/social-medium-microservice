@@ -1,22 +1,28 @@
 package com.mainul35.auth.config.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig {
 
     @Autowired
     private AuthenticationProvider authenticationProvider;
+    @Autowired
+    private AuthenticationManagerBuilder authenticationManagerBuilder;
 
     /**
      * Override this method to configure the {@link HttpSecurity}. Typically subclasses
@@ -34,14 +40,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * @param http the {@link HttpSecurity} to modify
      * @throws Exception if an error occurs
      */
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
+
+    @Bean
+    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+        var authManager = authenticationManagerBuilder.authenticationProvider(authenticationProvider).getOrBuild();
+        return http
                 .sessionManagement ()
                 .sessionCreationPolicy (SessionCreationPolicy.STATELESS) // We don't need to create any session
                 .and ()
                 .authenticationProvider (authenticationProvider)
-                .addFilterBefore (authFIlter (), AnonymousAuthenticationFilter.class) // Will handle authentication
+                .addFilterBefore (authFIlter(authManager), AnonymousAuthenticationFilter.class) // Will handle authentication
                 .authorizeRequests ()
                 .antMatchers ("/actuator/health").permitAll ()
                 .anyRequest()
@@ -51,17 +59,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .httpBasic().disable()
                 .logout().disable()
-                .cors();
+                .cors().and().build();
     }
 
-    public AuthFIlter authFIlter() throws Exception {
+    public AuthFIlter authFIlter(AuthenticationManager authenticationManager) throws Exception {
         OrRequestMatcher orRequestMatcher = new OrRequestMatcher(
                 new AntPathRequestMatcher("/user/**"),
                 new AntPathRequestMatcher("/token/**"),
                 new AntPathRequestMatcher("/role/**")
         );
         AuthFIlter authFIlter = new AuthFIlter(orRequestMatcher);
-        authFIlter.setAuthenticationManager(authenticationManager());
+        authFIlter.setAuthenticationManager(authenticationManager);
         return authFIlter;
     }
 }
