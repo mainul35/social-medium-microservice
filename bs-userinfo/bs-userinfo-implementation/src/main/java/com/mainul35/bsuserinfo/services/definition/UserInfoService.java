@@ -7,17 +7,17 @@ import controllers.dtos.request.UserInfoRequest;
 import controllers.dtos.response.UserInfoResponse;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 public interface UserInfoService {
-    List<UserEntity> getUsers(Integer pageIxd, Integer itemsPerPage);
+    Stream<UserEntity> getUsers(Integer pageIxd, Integer itemsPerPage);
 
     void create(UserInfoRequest userInfoRequest);
 
     @RabbitListener(queues = RabbitMQConfig.RMQ_NAME)
     void createUserConnections(String userId);
 
-    List<UserEntity> searchUser(Filter filter);
+    Stream<UserEntity> searchUser(Filter filter);
 
     UserInfoResponse getUserById(String id);
 }

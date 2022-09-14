@@ -12,8 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.stream.Stream;
 
 @RestController
 public class UserInfoController implements IUserInfoController {
@@ -26,19 +25,17 @@ public class UserInfoController implements IUserInfoController {
         this.userConnectionService = userConnectionService1;
     }
     @Override
-    public ResponseEntity<List<UserInfoResponse>> getUsers(Integer pageIxd, Integer itemsPerPage) {
+    public ResponseEntity<Stream<UserInfoResponse>> getUsers(Integer pageIxd, Integer itemsPerPage) {
         var userEntityList = userInfoService.getUsers(pageIxd, itemsPerPage);
         return ResponseEntity.ok(convertUserEntityListToUserInfoResponseList(userEntityList));
     }
 
-    private List<UserInfoResponse> convertUserEntityListToUserInfoResponseList(List<UserEntity> userEntityList) {
-        var userInfoResponses = new ArrayList<UserInfoResponse>();
-        userEntityList.forEach(userEntity -> {
+    private Stream<UserInfoResponse> convertUserEntityListToUserInfoResponseList(Stream<UserEntity> userEntityList) {
+        return userEntityList.map(userEntity -> {
             UserInfoResponse response = new UserInfoResponse();
             BeanUtils.copyProperties(userEntity, response);
-            userInfoResponses.add(response);
+            return response;
         });
-        return userInfoResponses;
     }
 
     @Override
@@ -48,8 +45,8 @@ public class UserInfoController implements IUserInfoController {
     }
 
     @Override
-    public ResponseEntity<List<UserInfoResponse>> search(Filter filter) {
-        List<UserEntity> userEntityList = userInfoService.searchUser(filter);
+    public ResponseEntity<Stream<UserInfoResponse>> search(Filter filter) {
+        var userEntityList = userInfoService.searchUser(filter);
         return ResponseEntity.ok(convertUserEntityListToUserInfoResponseList(userEntityList));
     }
 
@@ -60,7 +57,7 @@ public class UserInfoController implements IUserInfoController {
     }
 
     @Override
-    public ResponseEntity<List<UserConnectionInfoResponse>> getNonConnectedUsers(String id, Integer pageIxd, Integer itemsPerPage) {
+    public ResponseEntity<Stream<UserConnectionInfoResponse>> getNonConnectedUsers(String id, Integer pageIxd, Integer itemsPerPage) {
         return ResponseEntity.ok(this.userConnectionService.getNonConnectedUsers(id, pageIxd, itemsPerPage));
     }
 }

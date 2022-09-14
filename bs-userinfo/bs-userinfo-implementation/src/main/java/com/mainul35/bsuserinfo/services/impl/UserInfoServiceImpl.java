@@ -27,6 +27,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -43,9 +44,9 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public List<UserEntity> getUsers(Integer pageIxd, Integer itemsPerPage) {
+    public Stream<UserEntity> getUsers(Integer pageIxd, Integer itemsPerPage) {
         Pageable pagable = PageRequest.of(pageIxd - 1, itemsPerPage, Sort.by(Sort.Order.asc("username")));
-        return userInfoRepository.findAll(pagable).toList();
+        return userInfoRepository.findAll(pagable).stream();
     }
     @Override
     public void create(UserInfoRequest userInfoRequest) {
@@ -80,7 +81,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public List<UserEntity> searchUser(Filter filter) {
+    public Stream<UserEntity> searchUser(Filter filter) {
         var cb = em.getCriteriaBuilder();
         var cq = cb.createQuery(UserEntity.class);
         Root<UserEntity> root = cq.from(UserEntity.class);
@@ -94,7 +95,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             throw new RuntimeException("Search criteria doesn't match");
         }
         var query = em.createQuery(cq);
-        return query.getResultList();
+        return query.getResultStream();
     }
 
     @Override

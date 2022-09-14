@@ -104,7 +104,7 @@ public class UserConnectionServiceImpl implements UserConnectionService {
     }
 
     @Override
-    public List<UserConnectionInfoResponse> getAllConnectionRequests(String userId, Integer pageIxd, Integer itemsPerPage) {
+    public Stream<UserConnectionInfoResponse> getAllConnectionRequests(String userId, Integer pageIxd, Integer itemsPerPage) {
         var user = userInfoRepository.findById(userId)
                 .orElseThrow(() -> new NoContentException("No user found with this user Id"));
         var stream1 = connectionRepository
@@ -113,12 +113,11 @@ public class UserConnectionServiceImpl implements UserConnectionService {
         return Stream.concat(stream1, stream2).parallel()
                 .map(userConnection -> populateUserConnectionInfoResponseFromUserEntity(userConnection, user))
                 .filter(userConnection -> !userId.equals(userConnection.getRequestedById()))
-                .skip((long) (pageIxd - 1) * itemsPerPage).limit(itemsPerPage)
-                .toList();
+                .skip((long) (pageIxd - 1) * itemsPerPage).limit(itemsPerPage);
     }
 
     @Override
-    public List<UserConnectionInfoResponse> getAllBlockedConnections(String userId, Integer pageIxd, Integer itemsPerPage) {
+    public Stream<UserConnectionInfoResponse> getAllBlockedConnections(String userId, Integer pageIxd, Integer itemsPerPage) {
         var user = userInfoRepository.findById(userId)
                 .orElseThrow(() -> new NoContentException("No user found with this user Id"));
         var stream1 = connectionRepository
@@ -127,12 +126,11 @@ public class UserConnectionServiceImpl implements UserConnectionService {
         return Stream.concat(stream1, stream2)
                 .map(userConnection -> populateUserConnectionInfoResponseFromUserEntity(userConnection, user))
                 .filter(userConnection -> userId.equals(userConnection.getBlockedById()))
-                .skip((long) (pageIxd - 1) * itemsPerPage).limit(itemsPerPage)
-                .toList();
+                .skip((long) (pageIxd - 1) * itemsPerPage).limit(itemsPerPage);
     }
 
     @Override
-    public List<UserConnectionInfoResponse> getAllAcceptedConnections(String userId, Integer pageIxd, Integer itemsPerPage) {
+    public Stream<UserConnectionInfoResponse> getAllAcceptedConnections(String userId, Integer pageIxd, Integer itemsPerPage) {
         var user = userInfoRepository.findById(userId)
                 .orElseThrow(() -> new NoContentException("No user found with this user Id"));
         var stream1 = connectionRepository
@@ -141,8 +139,7 @@ public class UserConnectionServiceImpl implements UserConnectionService {
         return Stream.concat(stream1, stream2)
                 .map(userConnection -> populateUserConnectionInfoResponseFromUserEntity(userConnection, user))
                 .filter(userConnection -> !userId.equals(userConnection.getRequestedById()))
-                .skip((long) (pageIxd - 1) * itemsPerPage).limit(itemsPerPage)
-                .toList();
+                .skip((long) (pageIxd - 1) * itemsPerPage).limit(itemsPerPage);
     }
 
     @Deprecated
@@ -164,7 +161,7 @@ public class UserConnectionServiceImpl implements UserConnectionService {
      * */
     @Transactional
     @Override
-    public List<UserConnectionInfoResponse> getNonConnectedUsers(String id, Integer pageIxd, Integer itemsPerPage) {
+    public Stream<UserConnectionInfoResponse> getNonConnectedUsers(String id, Integer pageIxd, Integer itemsPerPage) {
         var userOptional = userInfoRepository.findById(id);
         if(userOptional.isPresent()){
             var stream1 = connectionRepository.findByUserConnectionId_User(userOptional.get());
@@ -176,10 +173,9 @@ public class UserConnectionServiceImpl implements UserConnectionService {
                         var userEntity = userOptional.get();
                         return populateUserConnectionInfoResponseFromUserEntity(userConnection, userEntity);
                     })
-                    .skip((long) (pageIxd - 1) * itemsPerPage).limit(itemsPerPage)
-                    .toList();
+                    .skip((long) (pageIxd - 1) * itemsPerPage).limit(itemsPerPage);
         }
-        return List.of(new UserConnectionInfoResponse());
+        return Stream.of(new UserConnectionInfoResponse());
     }
 
     private UserConnectionInfoResponse populateUserConnectionInfoResponseFromUserEntity(UserConnection userConnection, UserEntity userEntity) {
