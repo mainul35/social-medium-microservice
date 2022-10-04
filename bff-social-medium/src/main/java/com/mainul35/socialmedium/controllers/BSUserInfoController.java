@@ -22,34 +22,33 @@ import java.util.List;
 //@RequestMapping("/userinfo/users")
 public class BSUserInfoController {
 
-    private final BSUserInfoHandler handler;
+    private final BSUserInfoHandler bsUserInfoHandler;
 
 //    @Autowired
 //    private BSUserInfoService bsUserInfoService;
 
     public BSUserInfoController(BSUserInfoHandler bsUserInfoHandler) {
-        this.handler = bsUserInfoHandler;
+        this.bsUserInfoHandler = bsUserInfoHandler;
     }
 
     @Bean
-    RouterFunction<ServerResponse> routerFunction() {
+    RouterFunction<ServerResponse> bsUserInfoRouterFunction() {
         return RouterFunctions.route()
-                .POST("/userinfo/users/{userId}/connections/request/{connectionId}", handler::requestConnectionHandler)
-                .GET("/userinfo/users/{userId}/connections/requests", handler::getConnectionRequestsHandler)
-                .GET("/userinfo/users/{userId}/connections/blocked", handler::getBlockedConnectionsHandler)
-                .GET("/userinfo/users/{userId}/connections", handler::getConnectedUsersHandler)
-                .GET("/userinfo/users", handler::getUsersHandler)
-                .GET("/userinfo/users/{id}/profile", handler::getUserProfileByIdHandler)
-                .GET("/userinfo/users/{id}/non-connected-users", handler::getNonConnectedUsersHandler)
-                .POST("/userinfo/users/create", handler::createUserHandler)
-                .POST("/userinfo/users/search", handler::searchHandler)
-                .PUT("/userinfo/users/{userId}/connections/accept/{connectionId}", handler::acceptConnectionHandler)
-                .PUT("/userinfo/users/{userId}/connections/reject/{connectionId}", handler::rejectConnectionHandler)
-                .PUT("/userinfo/users/{userId}/connections/block/{connectionId}", handler::blockConnectionHandler)
-                .PUT("/userinfo/users/{userId}/connections/unblock/{connectionId}", handler::unblockConnectionHandler)
+                .POST("/userinfo/users/{userId}/connections/request/{connectionId}", bsUserInfoHandler::requestConnectionHandler)
+                .GET("/userinfo/users/{userId}/connections/requests", bsUserInfoHandler::getConnectionRequestsHandler)
+                .GET("/userinfo/users/{userId}/connections/blocked", bsUserInfoHandler::getBlockedConnectionsHandler)
+                .GET("/userinfo/users/{userId}/connections", bsUserInfoHandler::getConnectedUsersHandler)
+                .GET("/userinfo/users", bsUserInfoHandler::getUsersHandler)
+                .GET("/userinfo/users/{id}/profile", bsUserInfoHandler::getUserProfileByIdHandler)
+                .GET("/userinfo/users/{id}/non-connected-users", bsUserInfoHandler::getNonConnectedUsersHandler)
+                .POST("/userinfo/users/create", bsUserInfoHandler::createUserHandler)
+                .POST("/userinfo/users/search", bsUserInfoHandler::searchHandler)
+                .PUT("/userinfo/users/{userId}/connections/accept/{connectionId}", bsUserInfoHandler::acceptConnectionHandler)
+                .PUT("/userinfo/users/{userId}/connections/reject/{connectionId}", bsUserInfoHandler::rejectConnectionHandler)
+                .PUT("/userinfo/users/{userId}/connections/block/{connectionId}", bsUserInfoHandler::blockConnectionHandler)
+                .PUT("/userinfo/users/{userId}/connections/unblock/{connectionId}", bsUserInfoHandler::unblockConnectionHandler)
                 .build();
     }
-
 
     // @RestController based implementations
 
