@@ -21,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -62,6 +63,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         rabbitTemplate.convertAndSend(RabbitMQConfig.RMQ_NAME, savedUser.getId());
     }
     @Override
+    @Transactional
     @RabbitListener(queues = RabbitMQConfig.RMQ_NAME)
     public void createUserConnections(String userId) {
         var savedUserOptional = userInfoRepository.findById(userId);

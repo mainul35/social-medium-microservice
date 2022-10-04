@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @RequestMapping("/users/{userId}/connections")
 public interface IConnectionController {
@@ -25,11 +26,11 @@ public interface IConnectionController {
     ResponseEntity<UserConnectionInfoResponse> unblockConnection(@PathVariable("userId") String userId, @PathVariable("connectionId") String connectionId);
 
     @GetMapping("/requests")
-    ResponseEntity<List<UserConnectionInfoResponse>> getConnectionRequests(@PathVariable(name = "userId", required = false) String userId, @RequestParam("pageIdx") Integer pageIxd, @RequestParam(value = "itemsPerPage") Integer itemsPerPage);
+    ResponseEntity<Stream<UserConnectionInfoResponse>> getConnectionRequests(@PathVariable(name = "userId", required = false) String userId, @RequestParam("pageIdx") Integer pageIxd, @RequestParam(value = "itemsPerPage") Integer itemsPerPage);
 
     @GetMapping("/blocked")
-    ResponseEntity<List<UserConnectionInfoResponse>> getBlockedConnections(@PathVariable(name = "userId", required = false) String userId, @RequestParam("pageIdx") Integer pageIxd, @RequestParam("itemsPerPage") Integer itemsPerPage);
+    ResponseEntity<Stream<UserConnectionInfoResponse>> getBlockedConnections(@PathVariable(name = "userId", required = false) String userId, @RequestParam("pageIdx") Integer pageIxd, @RequestParam("itemsPerPage") Integer itemsPerPage);
 
     @GetMapping
-    ResponseEntity<List<UserConnectionInfoResponse>> getConnectedUsers(@PathVariable(name = "userId", required = false) String userId, @RequestParam("pageIdx") Integer pageIxd, @RequestParam("itemsPerPage") Integer itemsPerPage);
+    ResponseEntity<Stream<UserConnectionInfoResponse>> getConnectedUsers(@PathVariable(name = "userId", required = false) String userId, @RequestParam("pageIdx") Integer pageIxd, @RequestParam("itemsPerPage") Integer itemsPerPage);
 }

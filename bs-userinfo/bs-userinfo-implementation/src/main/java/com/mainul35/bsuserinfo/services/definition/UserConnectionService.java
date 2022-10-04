@@ -18,10 +18,13 @@ public interface UserConnectionService {
 
     UserConnectionInfoResponse unblockConnection(String userId, String connectionId);
 
+    @Transactional
     Stream<UserConnectionInfoResponse> getAllConnectionRequests(String userId, Integer pageIxd, Integer itemsPerPage);
 
+    @Transactional
     Stream<UserConnectionInfoResponse> getAllBlockedConnections(String userId, Integer pageIxd, Integer itemsPerPage);
 
+    @Transactional
     Stream<UserConnectionInfoResponse> getAllAcceptedConnections(String userId, Integer pageIxd, Integer itemsPerPage);
 
     @Transactional

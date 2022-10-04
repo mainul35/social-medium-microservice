@@ -6,6 +6,7 @@ import controllers.dtos.request.Filter;
 import controllers.dtos.request.UserInfoRequest;
 import controllers.dtos.response.UserInfoResponse;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Stream;
 
@@ -14,6 +15,7 @@ public interface UserInfoService {
 
     void create(UserInfoRequest userInfoRequest);
 
+    @Transactional
     @RabbitListener(queues = RabbitMQConfig.RMQ_NAME)
     void createUserConnections(String userId);
 
