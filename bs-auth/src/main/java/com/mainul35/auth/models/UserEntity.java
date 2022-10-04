@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
-@Entity(name = "users")
+@Entity(name = "auth_users")
 @EqualsAndHashCode(callSuper = true)
 public class UserEntity extends GenericModel {
 
