@@ -106,6 +106,7 @@ public class BSUserInfoHandler {
         return requestMono.flatMap(userInfoRequest -> bsUserInfoService
                 .createConnection(userInfoRequest)
                 .flatMap(resp -> ServerResponse.ok().build()));
+        // TODO: After user basic info creation, create authentication and authorization info
     }
 
     public Mono<ServerResponse> searchHandler(ServerRequest request) {
