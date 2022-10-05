@@ -1,10 +1,13 @@
 package com.mainul35.socialmedium.handlers;
 
+import com.mainul35.socialmedium.services.BSAuthService;
 import com.mainul35.socialmedium.services.BSUserInfoService;
 import controllers.dtos.request.Filter;
 import controllers.dtos.request.UserInfoRequest;
 import controllers.dtos.response.UserConnectionInfoResponse;
 import controllers.dtos.response.UserInfoResponse;
+import lombok.AllArgsConstructor;
+
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -14,13 +17,11 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 @Component
+@AllArgsConstructor
 public class BSUserInfoHandler {
 
     private final BSUserInfoService bsUserInfoService;
-
-    public BSUserInfoHandler(BSUserInfoService bsUserInfoService) {
-        this.bsUserInfoService = bsUserInfoService;
-    }
+    private final BSAuthService authService;
 
     public Mono<ServerResponse> requestConnectionHandler(ServerRequest request) {
         var userId = request.pathVariables().get("userId");
@@ -104,8 +105,11 @@ public class BSUserInfoHandler {
     public Mono<ServerResponse> createUserHandler(ServerRequest request) {
         var requestMono = request.bodyToMono(UserInfoRequest.class);
         return requestMono.flatMap(userInfoRequest -> bsUserInfoService
-                .createConnection(userInfoRequest)
-                .flatMap(resp -> ServerResponse.ok().build()));
+                .createConnection(userInfoRequest).doOnNext(resp -> {
+                    // authService
+                });
+
+                // .flatMap(resp -> ServerResponse.ok().build()));
         // TODO: After user basic info creation, create authentication and authorization info
     }
 
