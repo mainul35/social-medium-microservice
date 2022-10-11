@@ -13,6 +13,7 @@ public class ReactiveSecurityConfig {
         .csrf().disable()
         .authorizeExchange()
         .pathMatchers("/users/create").permitAll()
+        .pathMatchers("/auth/login").permitAll()
         .anyExchange()
         // .permitAll();
         .authenticated()
