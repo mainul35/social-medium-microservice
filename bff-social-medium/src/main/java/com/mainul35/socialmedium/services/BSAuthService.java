@@ -67,4 +67,26 @@ public class BSAuthService {
                 .bodyToMono(UserEntity.class);
     }
 
+    public Mono<Boolean> validateToken(String authorizationHeader) {
+        return webClient.post().uri(uriBuilder -> uriBuilder
+                        .path("/token/validate")
+                        .build()
+                )
+                .header("authorization", authorizationHeader)
+                .retrieve()
+                .onStatus(
+                        HttpStatus.INTERNAL_SERVER_ERROR::equals,
+                        response -> response.bodyToMono(String.class).map(RuntimeException::new))
+                .onStatus(
+                        HttpStatus.UNAUTHORIZED::equals,
+                        response -> response.bodyToMono(String.class).map(RuntimeException::new))
+                .onStatus(
+                        HttpStatus.BAD_REQUEST::equals,
+                        response -> response.bodyToMono(String.class).map(RuntimeException::new))
+                .onStatus(
+                        HttpStatus.FORBIDDEN::equals,
+                        response -> response.bodyToMono(String.class).map(RuntimeException::new))
+                .bodyToMono(Boolean.class);
+    }
+
 }

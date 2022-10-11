@@ -2,6 +2,7 @@ package com.mainul35.socialmedium.config.exceptions;
 
 import com.mainul35.socialmedium.exceptions.NoContentException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -20,6 +21,7 @@ public class GlobalExceptionHandler {
 
     public static final String VALIDATION_ERROR = "validation_error";
     public static final String NO_CONTENT = "no_content";
+    public static final String UNAUTHORIZED = "unauthorized";
 
     @ExceptionHandler(value = {NoContentException.class})
     protected Mono<ServerResponse> handleLimitReached(NoContentException ex) {
@@ -33,6 +35,13 @@ public class GlobalExceptionHandler {
         ErrorResponse response = new ErrorResponse(NO_CONTENT, ex.getMessage());
         this.printStackTrace(ex);
         return Mono.just(response).flatMap(errorResponse -> ServerResponse.badRequest().bodyValue(errorResponse));
+    }
+
+    @ExceptionHandler(value = {UnauthorizedException.class})
+    protected Mono<ServerResponse> handleLimitReached(UnauthorizedException ex) {
+        ErrorResponse response = new ErrorResponse(UNAUTHORIZED, ex.getMessage());
+        this.printStackTrace(ex);
+        return Mono.just(response).flatMap(errorResponse -> ServerResponse.status(HttpStatus.UNAUTHORIZED).bodyValue(errorResponse));
     }
 
     /**

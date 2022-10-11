@@ -24,4 +24,9 @@ public class BSAuthHandler {
                         ServerResponse.ok().body(BodyInserters.fromValue(userEntity))
                 ));
     }
+
+    public Mono<ServerResponse> tokenValidationHandler(ServerRequest request) {
+        var authorizationHeader = request.headers().firstHeader("authorization");
+        return bsAuthService.validateToken(authorizationHeader).flatMap(aBoolean -> ServerResponse.ok().body(BodyInserters.fromValue(aBoolean)));
+    }
 }
