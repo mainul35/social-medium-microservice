@@ -1,12 +1,22 @@
 package com.mainul35.auth.dtos;
 
 import com.mainul35.auth.models.UserEntity;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Date;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserAuthInfoDto extends BaseDto<UserEntity> {
     private String id;
     private String username;
@@ -15,9 +25,6 @@ public class UserAuthInfoDto extends BaseDto<UserEntity> {
     private String jwtToken;
     private Date createdAt;
     private Date modifiedAt;
-
-    public UserAuthInfoDto() {
-    }
 
     public void mapEntityToDto(UserEntity userEntity) {
         this.setId(userEntity.getId());

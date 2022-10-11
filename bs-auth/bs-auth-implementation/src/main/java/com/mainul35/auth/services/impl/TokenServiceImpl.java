@@ -48,24 +48,23 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public void generateToken(UserEntity markdownUserModel) {
-        //TODO: Replace token with JWT
+    public void generateToken(UserEntity userEntity) {
         var claims = new HashMap<String, Object>();
-        claims.put("iss", markdownUserModel.getId());
+        claims.put("iss", userEntity.getId());
         claims.put("exp", System.currentTimeMillis() + (1000 * 60 * 60 * 12));
         claims.put("iat", System.currentTimeMillis());
-        claims.put("sub", markdownUserModel.getUsername());
-        claims.put("aud", markdownUserModel.getRoles().toString());
+        claims.put("sub", userEntity.getUsername());
+        claims.put("aud", userEntity.getRoles().toString());
 
         String jwtToken = Jwts.builder()
                 .setClaims(claims)
                 .signWith(authSigninKeyResolver.getSecretKey(), SignatureAlgorithm.HS512)
                 .compact();
-        if (validateToken(markdownUserModel.getJwtToken())) {
-            markdownUserModel.setJwtToken(jwtToken);
+        if (validateToken(userEntity.getJwtToken())) {
+            userEntity.setJwtToken(jwtToken.toString());
         } else {
-            markdownUserModel.setJwtToken(jwtToken);
-            userRepository.save(markdownUserModel);
+            userEntity.setJwtToken(jwtToken.toString());
+            userRepository.save(userEntity);
         }
     }
 }

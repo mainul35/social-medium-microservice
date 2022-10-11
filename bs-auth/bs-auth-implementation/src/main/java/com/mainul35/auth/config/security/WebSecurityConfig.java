@@ -8,7 +8,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
@@ -64,9 +63,9 @@ public class WebSecurityConfig {
 
     public AuthFIlter authFIlter(AuthenticationManager authenticationManager) throws Exception {
         OrRequestMatcher orRequestMatcher = new OrRequestMatcher(
-                new AntPathRequestMatcher("/user/**"),
-                new AntPathRequestMatcher("/token/**"),
-                new AntPathRequestMatcher("/role/**")
+                new AntPathRequestMatcher("/auth/user/**"),
+                new AntPathRequestMatcher("/auth/token/**"),
+                new AntPathRequestMatcher("/auth/role/**")
         );
         AuthFIlter authFIlter = new AuthFIlter(orRequestMatcher);
         authFIlter.setAuthenticationManager(authenticationManager);

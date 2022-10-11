@@ -95,10 +95,10 @@ public class UserServiceImpl implements UserService {
     public UserAuthInfoDto loginUser(UserLoginDto userLoginDto) {
         Optional<UserEntity> userEntityOptional = userRepository.findByUsername(userLoginDto.getUsername());
         if (userEntityOptional.isPresent()) {
-            UserEntity markdownUserModel = userEntityOptional.get();
-            if (passwordEncoder.matches(userLoginDto.getPassword(), markdownUserModel.getPassword())) {
-                tokenService.generateToken(markdownUserModel);
-                var dto = modelMapper.map(markdownUserModel, UserAuthInfoDto.class);
+            UserEntity userEntity = userEntityOptional.get();
+            if (passwordEncoder.matches(userLoginDto.getPassword(), userEntity.getPassword())) {
+                tokenService.generateToken(userEntity);
+                var dto = modelMapper.map(userEntity, UserAuthInfoDto.class);
                 dto.setPassword("*****");
                 return dto;
             } else {

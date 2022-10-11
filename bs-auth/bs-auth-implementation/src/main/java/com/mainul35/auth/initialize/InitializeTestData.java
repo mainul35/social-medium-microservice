@@ -65,16 +65,16 @@ public class InitializeTestData implements InitializeData {
     private void addUsers() {
         userRepository.deleteAll();
         try {
-            List<UserEntity> markdownUserModels = new ObjectMapper()
+            List<UserEntity> userEntities = new ObjectMapper()
                     .readValue(
                             resourceLoader.getResource("classpath:users.json").getInputStream(),
                             new TypeReference<ArrayList<UserEntity>>() {
                             }
                     );
-            markdownUserModels.forEach(markdownUserModel -> {
-                tokenService.generateToken(markdownUserModel);
-                markdownUserModel.setPassword(passwordEncoder.encode(markdownUserModel.getPassword()));
-                userRepository.saveAndFlush(markdownUserModel);
+                    userEntities.forEach(userEntity -> {
+                tokenService.generateToken(userEntity);
+                userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
+                userRepository.saveAndFlush(userEntity);
             });
         } catch (IOException e) {
             e.printStackTrace();

@@ -16,8 +16,7 @@ public class UserEntity extends GenericModel {
     @Column(unique = true)
     private String username;
 
-    @Lob
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String jwtToken;
 
     @Column

@@ -7,5 +7,5 @@ public interface TokenService {
 
     boolean validateToken(String jwtToken) throws InvalidTokenException;
 
-    void generateToken(UserEntity markdownUserModel);
+    void generateToken(UserEntity userEntity);
 }
