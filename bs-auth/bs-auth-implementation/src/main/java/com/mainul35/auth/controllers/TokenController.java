@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @RestController
-@RequestMapping("/token")
+@RequestMapping("/auth/token")
 public class TokenController {
 
     @Autowired
