@@ -15,6 +15,12 @@
         <java.version>17</java.version>
     </properties>
     <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
@@ -47,6 +53,22 @@
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-web</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mainul35</groupId>
+            <artifactId>bs-auth-definition</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-web</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-data-jpa</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -101,33 +123,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <!-- region: Profiles -->
-<!--    <profiles>-->
-
-<!--        <profile>-->
-<!--            <id>dev</id>-->
-<!--            <activation>-->
-<!--                <activeByDefault>true</activeByDefault>-->
-<!--            </activation>-->
-<!--            <properties>-->
-<!--                <maven.test.skip>false</maven.test.skip>-->
-<!--                <bff-socialmedium.active.profile>dev</bff-socialmedium.active.profile>-->
-<!--                <bff-socialmedium.serverPort>8080</bff-socialmedium.serverPort>-->
-<!--            </properties>-->
-<!--        </profile>-->
-<!--        <profile>-->
-<!--            <id>prod</id>-->
-<!--            <activation>-->
-<!--                <activeByDefault>false</activeByDefault>-->
-<!--            </activation>-->
-<!--            <properties>-->
-<!--                <maven.test.skip>false</maven.test.skip>-->
-<!--                <active.profile>prod</active.profile>-->
-<!--                <db.url>jdbc:postgresql://localhost:5432/auth_demo_prod?reWriteBatchedInserts=true</db.url>-->
-<!--                <db.password>secret</db.password>-->
-<!--                <db.username>postgres</db.username>-->
-<!--            </properties>-->
-<!--        </profile>-->
-<!--    </profiles>-->
 </project>

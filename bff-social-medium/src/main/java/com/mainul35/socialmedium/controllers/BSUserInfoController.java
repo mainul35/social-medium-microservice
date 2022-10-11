@@ -41,7 +41,7 @@ public class BSUserInfoController {
                 .GET("/userinfo/users", bsUserInfoHandler::getUsersHandler)
                 .GET("/userinfo/users/{id}/profile", bsUserInfoHandler::getUserProfileByIdHandler)
                 .GET("/userinfo/users/{id}/non-connected-users", bsUserInfoHandler::getNonConnectedUsersHandler)
-                .POST("/userinfo/users/create", bsUserInfoHandler::createUserHandler)
+                .POST("/users/create", bsUserInfoHandler::createUserHandler)
                 .POST("/userinfo/users/search", bsUserInfoHandler::searchHandler)
                 .PUT("/userinfo/users/{userId}/connections/accept/{connectionId}", bsUserInfoHandler::acceptConnectionHandler)
                 .PUT("/userinfo/users/{userId}/connections/reject/{connectionId}", bsUserInfoHandler::rejectConnectionHandler)

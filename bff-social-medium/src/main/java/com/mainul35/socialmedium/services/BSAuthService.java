@@ -1,10 +1,15 @@
 package com.mainul35.socialmedium.services;
 
+import com.mainul35.auth.dtos.UserAuthInfoDto;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import reactor.core.publisher.Mono;
 
 @Service
 @Validated
@@ -19,6 +24,27 @@ public class BSAuthService {
                 .build();
     }
 
-    
+    public Mono<UserAuthInfoDto> createAuthenticationInfo(UserAuthInfoDto userInfoRequest) {
+        System.out.println(userInfoRequest.toString());
+        return webClient.post().uri(uriBuilder -> uriBuilder
+                        .path("/user/create")
+                        .build()
+                )
+                .bodyValue(userInfoRequest)
+                .retrieve()
+                .onStatus( 
+                    HttpStatus.INTERNAL_SERVER_ERROR::equals,
+                    response -> response.bodyToMono(String.class).map(RuntimeException::new)) 
+                  .onStatus(
+                    HttpStatus.BAD_REQUEST::equals,
+                    response -> response.bodyToMono(String.class).map(RuntimeException::new))
+                .onStatus(
+                    HttpStatus.UNAUTHORIZED::equals,
+                    response -> response.bodyToMono(String.class).map(RuntimeException::new))
+                .onStatus(
+                    HttpStatus.FORBIDDEN::equals,
+                    response -> response.bodyToMono(String.class).map(RuntimeException::new))
+                .bodyToMono(UserAuthInfoDto.class);
+    }
 
 }

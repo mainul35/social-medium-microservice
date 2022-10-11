@@ -1,4 +1,4 @@
-/* package com.mainul35.socialmedium.config.security;
+package com.mainul35.socialmedium.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
@@ -10,15 +10,15 @@ public class ReactiveSecurityConfig {
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
-        .cors().disable()
+        .csrf().disable()
         .authorizeExchange()
-        .anyExchange().permitAll();
-                
-            //     .authenticated()
-            //     .and()
-            // .httpBasic(); // Pure basic is not enough for us!
+        .pathMatchers("/users/create").permitAll()
+        .anyExchange()
+        // .permitAll();
+        .authenticated()
+        .and()
+        .httpBasic(); // Pure basic is not enough for us!
             
         return http.build();
     }
 }
- */

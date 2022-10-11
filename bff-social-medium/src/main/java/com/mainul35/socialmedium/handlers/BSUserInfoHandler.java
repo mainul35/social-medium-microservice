@@ -1,5 +1,7 @@
 package com.mainul35.socialmedium.handlers;
 
+import com.mainul35.auth.dtos.UserAuthInfoDto;
+import com.mainul35.socialmedium.dto.request.CreateUserRequest;
 import com.mainul35.socialmedium.services.BSAuthService;
 import com.mainul35.socialmedium.services.BSUserInfoService;
 import controllers.dtos.request.Filter;
@@ -103,14 +105,16 @@ public class BSUserInfoHandler {
     }
 
     public Mono<ServerResponse> createUserHandler(ServerRequest request) {
-        var requestMono = request.bodyToMono(UserInfoRequest.class);
-        return requestMono.flatMap(userInfoRequest -> bsUserInfoService
-                .createConnection(userInfoRequest).doOnNext(resp -> {
-                    // authService
-                });
-
-                // .flatMap(resp -> ServerResponse.ok().build()));
-        // TODO: After user basic info creation, create authentication and authorization info
+        var requestMono = request.bodyToMono(CreateUserRequest.class);
+        return requestMono.flatMap(createUserRequest -> bsUserInfoService
+                .createConnection(createUserRequest.userInfo())
+                .map(resp -> {
+                    var userAuthInfoDto = new UserAuthInfoDto();
+                    userAuthInfoDto.setUsername(createUserRequest.userInfo().getUsername());
+                    userAuthInfoDto.setPassword(createUserRequest.authInfo().getPassword());
+                    var authServerResp = authService.createAuthenticationInfo(userAuthInfoDto);
+                    return authServerResp.flatMap(authInfoDto -> ServerResponse.ok().build());
+                }).flatMap(serverResponseMono -> serverResponseMono));
     }
 
     public Mono<ServerResponse> searchHandler(ServerRequest request) {
