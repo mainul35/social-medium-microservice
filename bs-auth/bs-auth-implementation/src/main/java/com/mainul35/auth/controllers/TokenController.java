@@ -1,5 +1,6 @@
 package com.mainul35.auth.controllers;
 
+import com.mainul35.auth.exceptions.InvalidTokenException;
 import com.mainul35.auth.services.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,11 @@ public class TokenController {
         if (!authHeader.isEmpty()) {
             jwtToken = authHeader.split("\\s")[1];
         }
-        return ResponseEntity.ok(tokenService.validateToken(jwtToken));
+
+        var isValid = tokenService.validateToken(jwtToken);
+        if (!isValid) {
+            throw new InvalidTokenException("Invalid JWT Token");
+        }
+        return ResponseEntity.ok(isValid);
     }
 }
