@@ -1,25 +1,33 @@
 package com.mainul35.socialmedium.config.security;
 
 import com.mainul35.socialmedium.config.exceptions.UnauthorizedException;
-import org.springframework.stereotype.Component;
+import com.mainul35.socialmedium.services.BSAuthService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
-
-import com.mainul35.socialmedium.handlers.BSAuthHandler;
-import com.mainul35.socialmedium.services.BSAuthService;
-
-import lombok.AllArgsConstructor;
 import reactor.core.publisher.Mono;
 
-@Component
-@AllArgsConstructor
-public class JwtFilter implements WebFilter {
+import java.util.Arrays;
 
-    private final BSAuthService authService;
+public class JwtFilter implements WebFilter {
+    @Autowired
+    private BSAuthService authService;
+
+    private String[] publicPaths;
+
+    public JwtFilter(String[] publicPaths) {
+        this.publicPaths = publicPaths;
+    }
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+        var publicPathOptional = Arrays.stream(publicPaths).filter(s -> s.equals(exchange.getRequest().getPath().value()))
+                .findFirst();
+        if (publicPathOptional.isPresent()) {
+            return chain.filter(exchange);
+        }
+
         var headers = exchange.getRequest().getHeaders();
         if (headers.containsKey("authorization")) {
             var authorizationHeaders = exchange.getRequest().getHeaders().get("authorization");
@@ -27,10 +35,10 @@ public class JwtFilter implements WebFilter {
 
             return headerOptional
                     .map(s -> authService.validateToken(s)
-                            .filter(boolVal -> boolVal == true)
+                            .filter(boolVal -> boolVal)
                             .flatMap(arg0 -> chain.filter(exchange)))
-                    .orElseThrow(() -> new UnauthorizedException("UNAUTHORIZED"));
+                    .orElseThrow(() -> new UnauthorizedException("Invalid JWT token"));
         }
-        throw new UnauthorizedException("UNAUTHORIZED");
+        throw new UnauthorizedException("No JWT token was provided");
     }
 }

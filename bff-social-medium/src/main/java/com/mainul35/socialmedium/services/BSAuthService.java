@@ -3,14 +3,13 @@ package com.mainul35.socialmedium.services;
 import com.mainul35.auth.dtos.UserAuthInfoDto;
 import com.mainul35.auth.dtos.UserLoginDto;
 import com.mainul35.auth.models.UserEntity;
+import com.mainul35.socialmedium.config.exceptions.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.reactive.function.client.WebClient;
-
 import reactor.core.publisher.Mono;
 
 @Service
@@ -76,15 +75,12 @@ public class BSAuthService {
                 .retrieve()
                 .onStatus(
                         HttpStatus.INTERNAL_SERVER_ERROR::equals,
-                        response -> response.bodyToMono(String.class).map(RuntimeException::new))
+                        response -> response.bodyToMono(String.class).map(s -> new UnauthorizedException("Invalid JWT Token")))
                 .onStatus(
                         HttpStatus.UNAUTHORIZED::equals,
-                        response -> response.bodyToMono(String.class).map(RuntimeException::new))
+                        response -> response.bodyToMono(String.class).map(UnauthorizedException::new))
                 .onStatus(
                         HttpStatus.BAD_REQUEST::equals,
-                        response -> response.bodyToMono(String.class).map(RuntimeException::new))
-                .onStatus(
-                        HttpStatus.FORBIDDEN::equals,
                         response -> response.bodyToMono(String.class).map(RuntimeException::new))
                 .bodyToMono(Boolean.class);
     }
