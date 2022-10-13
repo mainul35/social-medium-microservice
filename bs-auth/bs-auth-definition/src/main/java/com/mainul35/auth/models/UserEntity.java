@@ -22,8 +22,12 @@ public class UserEntity extends GenericModel {
     @Column
     private String password;
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    private List<String> roles;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_roles",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
+    )
+    private List<RoleEntity> roles;
 
     public UserEntity() {
         super();

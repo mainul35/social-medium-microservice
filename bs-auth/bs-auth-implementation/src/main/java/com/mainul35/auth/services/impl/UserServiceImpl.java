@@ -61,8 +61,7 @@ public class UserServiceImpl implements UserService {
         // Assign default role for user
         userEntity.setRoles(
                 roleRepository.findAll().stream()
-                        .map(RoleEntity::getRole)
-                        .filter(role -> matchRole(role, userInfoDto.getRoles()))
+                        .filter(role -> matchRole(role.getRole(), userInfoDto.getRoles()))
                         .collect(Collectors.toList())
         );
 

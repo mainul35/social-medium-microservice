@@ -38,6 +38,14 @@ public class TokenServiceImpl implements TokenService {
                     .setSigningKeyResolver(authSigninKeyResolver)
                     .build().parse(jwtToken);
             var map = (Map<String, Object>) jwtTokenObj.getBody();
+            var userEntityOptional = userRepository.findByUsername(map.get("sub").toString());
+
+            if (userEntityOptional.isPresent()) {
+                var userEntity = userEntityOptional.get();
+                if (!userEntity.getJwtToken().equals(jwtToken.toString())) {
+                    throw new InvalidTokenException("Invalid JWT Token");
+                }
+            }
             var exp = (Long) map.get("exp");
 
             // Check token not expired
@@ -64,7 +72,7 @@ public class TokenServiceImpl implements TokenService {
             userEntity.setJwtToken(jwtToken.toString());
         } else {
             userEntity.setJwtToken(jwtToken.toString());
-            userRepository.save(userEntity);
         }
+        userRepository.save(userEntity);
     }
 }

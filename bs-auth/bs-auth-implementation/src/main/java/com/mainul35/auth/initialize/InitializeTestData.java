@@ -41,12 +41,10 @@ public class InitializeTestData implements InitializeData {
     @Override
     public void initialize() {
         addRoles();
-        addUsers();
+//        addUsers();
     }
 
     private void addRoles() {
-        roleRepository.deleteAll();
-
         try {
             List<RoleEntity> markdownRoleModels = new ObjectMapper()
                     .readValue(
@@ -55,7 +53,9 @@ public class InitializeTestData implements InitializeData {
                             }
                     );
             markdownRoleModels.forEach(markdownRoleModel -> {
-                roleRepository.saveAndFlush(markdownRoleModel);
+                if (roleRepository.findByRole(markdownRoleModel.getRole()).isEmpty()) {
+                    roleRepository.saveAndFlush(markdownRoleModel);
+                }
             });
         } catch (IOException e) {
             e.printStackTrace();

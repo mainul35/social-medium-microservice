@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,7 +30,11 @@ public class UserAuthInfoDto extends BaseDto<UserEntity> {
     public void mapEntityToDto(UserEntity userEntity) {
         this.setId(userEntity.getId());
         this.setUsername(userEntity.getUsername());
-        this.setRoles(userEntity.getRoles());
+        var roles = new ArrayList<String>();
+        userEntity.getRoles().forEach(roleEntity -> {
+            roles.add(roleEntity.getRole());
+        });
+        this.setRoles(roles);
         this.setPassword("******");
         this.setJwtToken(userEntity.getJwtToken());
         this.setCreatedAt(userEntity.getCreatedAt());
