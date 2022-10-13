@@ -30,14 +30,20 @@ public class JwtFilter implements WebFilter {
 
         var headers = exchange.getRequest().getHeaders();
         if (headers.containsKey("authorization")) {
-            var authorizationHeaders = exchange.getRequest().getHeaders().get("authorization");
-            var headerOptional = authorizationHeaders.stream().filter(s -> s.contains("bearer")).findFirst();
+            var authorizationHeaders = exchange.getRequest()
+                    .getHeaders()
+                    .get("authorization");
+            var headerOptional = authorizationHeaders
+                    .stream()
+                    .filter(s -> s.contains("bearer"))
+                    .findFirst();
 
-            return headerOptional
-                    .map(s -> authService.validateToken(s)
-                            .filter(boolVal -> boolVal)
-                            .flatMap(arg0 -> chain.filter(exchange)))
-                    .orElseThrow(() -> new UnauthorizedException("Invalid JWT token"));
+            if (headerOptional.isPresent()) {
+                var authHeader = headerOptional.get();
+                return authService.validateToken(authHeader)
+                        .filter(aBoolean -> aBoolean == true)
+                        .flatMap(aBoolean -> chain.filter(exchange));
+            }
         }
         throw new UnauthorizedException("No JWT token was provided");
     }
