@@ -14,8 +14,10 @@ public class CorsGlobalConfiguration implements WebFluxConfigurer {
 
     public void addCorsMappings(CorsRegistry corsRegistry) {
         corsRegistry.addMapping("/**")
-                .allowedOrigins(origin)
-                .allowedMethods("*")
+                .allowedOrigins("*")
+                .allowedMethods("GET","PUT","POST","DELETE","HEAD")
+                .allowedHeaders("*")
+                .exposedHeaders("*")
                 .maxAge(3600);
     }
 }

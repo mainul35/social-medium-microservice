@@ -3,6 +3,7 @@ package com.mainul35.socialmedium.config.security;
 import com.mainul35.socialmedium.config.exceptions.UnauthorizedException;
 import com.mainul35.socialmedium.services.BSAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
@@ -28,14 +29,20 @@ public class JwtFilter implements WebFilter {
             return chain.filter(exchange);
         }
 
+        var request = exchange.getRequest();
         var headers = exchange.getRequest().getHeaders();
+
+        if (request.getMethod().equals(HttpMethod.OPTIONS) && headers.get("Access-Control-Request-Headers").get(0).contains("authorization")) {
+            return chain.filter(exchange);
+        }
+
         if (headers.containsKey("authorization")) {
             var authorizationHeaders = exchange.getRequest()
                     .getHeaders()
                     .get("authorization");
             var headerOptional = authorizationHeaders
                     .stream()
-                    .filter(s -> s.contains("bearer"))
+                    .filter(s -> s.contains("bearer") || s.contains("Bearer"))
                     .findFirst();
 
             if (headerOptional.isPresent()) {

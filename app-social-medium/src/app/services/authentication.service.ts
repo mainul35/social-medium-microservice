@@ -93,8 +93,8 @@ export class AuthenticationService implements CanActivate {
   }
 
   login(username: string, password: string): Observable<AuthInfoModel> | null {
-    const url = 'user/login';
-    return this.httpClient.post<AuthInfoModel>(environment.SERVER_URL + url, {username, password})
+    const url = 'auth/login';
+    return this.httpClient.post<AuthInfoModel>(environment.BASE_URL + url, {username, password})
       .pipe(
         map(userModel => {
           this.cookieService.set(AuthenticationService.USER_INFO, JSON.stringify(userModel));
@@ -106,7 +106,7 @@ export class AuthenticationService implements CanActivate {
 
   registerUser(formData: any): Observable<AuthInfoModel> {
     const url = '/user/create';
-    return this.httpClient.post<AuthInfoModel>(environment.SERVER_URL + url, formData)
+    return this.httpClient.post<AuthInfoModel>(environment.BASE_URL + url, formData)
       .pipe(
         map(userModel => {
           this.cookieService.set(AuthenticationService.USER_INFO, JSON.stringify(userModel));

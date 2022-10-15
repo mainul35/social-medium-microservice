@@ -20,6 +20,8 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { BrowserUsersComponent } from './components/browser-users/browser-users.component';
 import {LoginComponent} from "./components/login/login.component";
+import { HTTP_INTERCEPTORS } from '@angular/common/http';  
+import { TokenInterceptor } from './interceptors/TokenInterceptor';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,14 @@ import {LoginComponent} from "./components/login/login.component";
     NgbNavModule,
     ReactiveFormsModule
   ],
-  providers: [HttpClientModule],
+  providers: [
+    HttpClientModule,
+    {  
+      provide: HTTP_INTERCEPTORS,  
+      useClass: TokenInterceptor,  
+      multi: true  
+    } 
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

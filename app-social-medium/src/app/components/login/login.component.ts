@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
     this.loading = true;
     // @ts-ignore
     this.authenticationService.login(this.f.username.value, this.f.password.value)
-      .subscribe(
+      ?.subscribe(
         data => {
           console.log(data);
           this.router.navigate(['/home']);
