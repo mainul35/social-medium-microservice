@@ -1,5 +1,6 @@
 package com.mainul35.bsuserinfo.services.impl;
 
+import com.mainul35.bsuserinfo.config.exceptions.DuplicateEntryException;
 import com.mainul35.bsuserinfo.config.rabbitmq.RabbitMQConfig;
 import controllers.dtos.enums.ConnectionStatus;
 import com.mainul35.bsuserinfo.entity.UserConnection;
@@ -45,14 +46,14 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public Stream<UserEntity> getUsers(Integer pageIxd, Integer itemsPerPage) {
+    public List<UserEntity> getUsers(Integer pageIxd, Integer itemsPerPage) {
         Pageable pagable = PageRequest.of(pageIxd - 1, itemsPerPage, Sort.by(Sort.Order.asc("username")));
-        return userInfoRepository.findAll(pagable).stream();
+        return userInfoRepository.findAll(pagable).toList();
     }
     @Override
     public void create(UserInfoRequest userInfoRequest) {
         userInfoRepository.findByUsername(userInfoRequest.getUsername()).ifPresent(user -> {
-            throw new RuntimeException("User already exists");
+            throw new DuplicateEntryException("User already exists");
         });
         UserEntity userEntity = new UserEntity();
         BeanUtils.copyProperties(userInfoRequest, userEntity);
@@ -83,7 +84,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public Stream<UserEntity> searchUser(Filter filter) {
+    public List<UserEntity> searchUser(Filter filter) {
         var cb = em.getCriteriaBuilder();
         var cq = cb.createQuery(UserEntity.class);
         Root<UserEntity> root = cq.from(UserEntity.class);
@@ -97,12 +98,12 @@ public class UserInfoServiceImpl implements UserInfoService {
             throw new RuntimeException("Search criteria doesn't match");
         }
         var query = em.createQuery(cq);
-        return query.getResultStream();
+        return query.getResultList();
     }
 
     @Override
     public UserInfoResponse getUserById(String id) {
-        var user = userInfoRepository.findById(id)
+        var user = userInfoRepository.findByUsername(id)
                 .orElseThrow(() -> new NoContentException("No user found with this id"));
         var userResp = new UserInfoResponse();
         BeanUtils.copyProperties(user, userResp);

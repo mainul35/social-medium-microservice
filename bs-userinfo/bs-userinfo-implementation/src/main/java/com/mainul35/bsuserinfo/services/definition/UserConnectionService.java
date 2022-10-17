@@ -4,6 +4,7 @@ import com.mainul35.bsuserinfo.entity.UserConnection;
 import controllers.dtos.response.UserConnectionInfoResponse;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 public interface UserConnectionService {
@@ -19,14 +20,14 @@ public interface UserConnectionService {
     UserConnectionInfoResponse unblockConnection(String userId, String connectionId);
 
     @Transactional
-    Stream<UserConnectionInfoResponse> getAllConnectionRequests(String userId, Integer pageIxd, Integer itemsPerPage);
+    List<UserConnectionInfoResponse> getAllConnectionRequests(String userId, Integer pageIxd, Integer itemsPerPage);
 
     @Transactional
-    Stream<UserConnectionInfoResponse> getAllBlockedConnections(String userId, Integer pageIxd, Integer itemsPerPage);
+    List<UserConnectionInfoResponse> getAllBlockedConnections(String userId, Integer pageIxd, Integer itemsPerPage);
 
     @Transactional
-    Stream<UserConnectionInfoResponse> getAllAcceptedConnections(String userId, Integer pageIxd, Integer itemsPerPage);
+    List<UserConnectionInfoResponse> getAllAcceptedConnections(String userId, Integer pageIxd, Integer itemsPerPage);
 
     @Transactional
-    Stream<UserConnectionInfoResponse> getNonConnectedUsers(String id, Integer pageIxd, Integer itemsPerPage);
+    List<UserConnectionInfoResponse> getNonConnectedUsers(String id, Integer pageIxd, Integer itemsPerPage);
 }

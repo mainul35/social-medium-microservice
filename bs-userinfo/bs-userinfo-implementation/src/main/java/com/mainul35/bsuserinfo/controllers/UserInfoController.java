@@ -12,7 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.stream.Stream;
+import java.util.List;
 
 @RestController
 public class UserInfoController implements IUserInfoController {
@@ -25,17 +25,17 @@ public class UserInfoController implements IUserInfoController {
         this.userConnectionService = userConnectionService1;
     }
     @Override
-    public ResponseEntity<Stream<UserInfoResponse>> getUsers(Integer pageIxd, Integer itemsPerPage) {
+    public ResponseEntity<List<UserInfoResponse>> getUsers(Integer pageIxd, Integer itemsPerPage) {
         var userEntityList = userInfoService.getUsers(pageIxd, itemsPerPage);
         return ResponseEntity.ok(convertUserEntityListToUserInfoResponseList(userEntityList));
     }
 
-    private Stream<UserInfoResponse> convertUserEntityListToUserInfoResponseList(Stream<UserEntity> userEntityList) {
-        return userEntityList.map(userEntity -> {
+    private List<UserInfoResponse> convertUserEntityListToUserInfoResponseList(List<UserEntity> userEntityList) {
+        return userEntityList.stream().map(userEntity -> {
             UserInfoResponse response = new UserInfoResponse();
             BeanUtils.copyProperties(userEntity, response);
             return response;
-        });
+        }).toList();
     }
 
     @Override
@@ -45,7 +45,7 @@ public class UserInfoController implements IUserInfoController {
     }
 
     @Override
-    public ResponseEntity<Stream<UserInfoResponse>> search(Filter filter) {
+    public ResponseEntity<List<UserInfoResponse>> search(Filter filter) {
         var userEntityList = userInfoService.searchUser(filter);
         return ResponseEntity.ok(convertUserEntityListToUserInfoResponseList(userEntityList));
     }
@@ -57,7 +57,7 @@ public class UserInfoController implements IUserInfoController {
     }
 
     @Override
-    public ResponseEntity<Stream<UserConnectionInfoResponse>> getNonConnectedUsers(String id, Integer pageIxd, Integer itemsPerPage) {
+    public ResponseEntity<List<UserConnectionInfoResponse>> getNonConnectedUsers(String id, Integer pageIxd, Integer itemsPerPage) {
         return ResponseEntity.ok(this.userConnectionService.getNonConnectedUsers(id, pageIxd, itemsPerPage));
     }
 }

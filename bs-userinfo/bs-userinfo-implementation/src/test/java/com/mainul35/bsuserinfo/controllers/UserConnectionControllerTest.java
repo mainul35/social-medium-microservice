@@ -2,12 +2,12 @@ package com.mainul35.bsuserinfo.controllers;
 
 import com.mainul35.bsuserinfo.initialize.InitializeData;
 import controllers.dtos.enums.ConnectionStatus;
-import org.junit.After;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
@@ -50,9 +50,9 @@ class UserConnectionControllerTest {
 
         // Get request list of mainul_4
         var totalConnectionReqResp = userConnectionController.getConnectionRequests(user4, 1, 5);
-        var body = totalConnectionReqResp.getBody();
+        var list = totalConnectionReqResp.getBody();
         assertTrue(totalConnectionReqResp.getStatusCode().is2xxSuccessful());
-        assertEquals(1, body.toList().size());
+        assertEquals(1, list.size());
     }
 
     @Test
@@ -68,9 +68,8 @@ class UserConnectionControllerTest {
     @Order(4)
     void getConnectedUsers() {
         var resp = userConnectionController.getConnectedUsers(userId, 1, 5);
-        var body = resp.getBody();
+        var list = resp.getBody();
         assertTrue(resp.getStatusCode().is2xxSuccessful());
-        var list = body.toList();
         assertEquals(1, list.size());
         assertEquals(list.get(0).getStatus(), ConnectionStatus.ACCEPTED);
     }
@@ -113,9 +112,9 @@ class UserConnectionControllerTest {
     void getBlockedConnections() {
         var user3 = "mainul_3";
         var resp = userConnectionController.getBlockedConnections(user3, 1, 5);
-        var body = resp.getBody();
+        var list = resp.getBody();
         assertTrue(resp.getStatusCode().is2xxSuccessful());
-        assertEquals(1, body.toList().size());
+        assertEquals(1, list.size());
     }
 
     @Test

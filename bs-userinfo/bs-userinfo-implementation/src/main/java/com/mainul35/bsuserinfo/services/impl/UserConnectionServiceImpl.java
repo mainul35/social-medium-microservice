@@ -104,45 +104,42 @@ public class UserConnectionServiceImpl implements UserConnectionService {
     }
 
     @Override
-    public Stream<UserConnectionInfoResponse> getAllConnectionRequests(String userId, Integer pageIxd, Integer itemsPerPage) {
+    public List<UserConnectionInfoResponse> getAllConnectionRequests(String userId, Integer pageIxd, Integer itemsPerPage) {
         var user = userInfoRepository.findByUsername(userId)
                 .orElseThrow(() -> new NoContentException("No user found with this user Id"));
         var stream1 = connectionRepository
                 .findAllByUserConnectionId_UserAndConnectionStatus(user, ConnectionStatus.REQUESTED);
         var stream2 = connectionRepository.findAllByUserConnectionId_ConnectionAndConnectionStatus(user, ConnectionStatus.REQUESTED);
-        var list = Stream.concat(stream1, stream2).parallel()
+        return Stream.concat(stream1, stream2).parallel()
                 .map(userConnection -> populateUserConnectionInfoResponseFromUserEntity(userConnection, user))
                 .filter(userConnection -> !userId.equals(userConnection.getRequestedById()))
                 .skip((long) (pageIxd - 1) * itemsPerPage).limit(itemsPerPage).toList();
-        return list.stream();
     }
 
     @Override
-    public Stream<UserConnectionInfoResponse> getAllBlockedConnections(String userId, Integer pageIxd, Integer itemsPerPage) {
+    public List<UserConnectionInfoResponse> getAllBlockedConnections(String userId, Integer pageIxd, Integer itemsPerPage) {
         var user = userInfoRepository.findByUsername(userId)
                 .orElseThrow(() -> new NoContentException("No user found with this user Id"));
         var stream1 = connectionRepository
                 .findAllByUserConnectionId_UserAndConnectionStatus(user, ConnectionStatus.BLOCKED);
         var stream2 = connectionRepository.findAllByUserConnectionId_ConnectionAndConnectionStatus(user, ConnectionStatus.BLOCKED);
-        var list = Stream.concat(stream1, stream2)
+        return Stream.concat(stream1, stream2)
                 .map(userConnection -> populateUserConnectionInfoResponseFromUserEntity(userConnection, user))
                 .filter(userConnection -> userId.equals(userConnection.getBlockedById()))
                 .skip((long) (pageIxd - 1) * itemsPerPage).limit(itemsPerPage).toList();
-        return list.stream();
     }
 
     @Override
-    public Stream<UserConnectionInfoResponse> getAllAcceptedConnections(String userId, Integer pageIxd, Integer itemsPerPage) {
+    public List<UserConnectionInfoResponse> getAllAcceptedConnections(String userId, Integer pageIxd, Integer itemsPerPage) {
         var user = userInfoRepository.findByUsername(userId)
                 .orElseThrow(() -> new NoContentException("No user found with this user Id"));
         var stream1 = connectionRepository
                 .findAllByUserConnectionId_UserAndConnectionStatus(user, ConnectionStatus.ACCEPTED);
         var stream2 = connectionRepository.findAllByUserConnectionId_ConnectionAndConnectionStatus(user, ConnectionStatus.ACCEPTED);
-        var list = Stream.concat(stream1, stream2)
+        return Stream.concat(stream1, stream2)
                 .map(userConnection -> populateUserConnectionInfoResponseFromUserEntity(userConnection, user))
                 .filter(userConnection -> !userId.equals(userConnection.getRequestedById()))
                 .skip((long) (pageIxd - 1) * itemsPerPage).limit(itemsPerPage).toList();
-        return list.stream();
     }
 
     @Deprecated
@@ -164,8 +161,8 @@ public class UserConnectionServiceImpl implements UserConnectionService {
      * */
     @Transactional
     @Override
-    public Stream<UserConnectionInfoResponse> getNonConnectedUsers(String id, Integer pageIxd, Integer itemsPerPage) {
-        var userOptional = userInfoRepository.findById(id);
+    public List<UserConnectionInfoResponse> getNonConnectedUsers(String id, Integer pageIxd, Integer itemsPerPage) {
+        var userOptional = userInfoRepository.findByUsername(id);
         if(userOptional.isPresent()){
             var stream1 = connectionRepository.findByUserConnectionId_User(userOptional.get());
             var stream2 = connectionRepository.findByUserConnectionId_Connection(userOptional.get());
@@ -176,9 +173,9 @@ public class UserConnectionServiceImpl implements UserConnectionService {
                         var userEntity = userOptional.get();
                         return populateUserConnectionInfoResponseFromUserEntity(userConnection, userEntity);
                     })
-                    .skip((long) (pageIxd - 1) * itemsPerPage).limit(itemsPerPage);
+                    .skip((long) (pageIxd - 1) * itemsPerPage).limit(itemsPerPage).toList();
         }
-        return Stream.of(new UserConnectionInfoResponse());
+        return List.of(new UserConnectionInfoResponse());
     }
 
     private UserConnectionInfoResponse populateUserConnectionInfoResponseFromUserEntity(UserConnection userConnection, UserEntity userEntity) {

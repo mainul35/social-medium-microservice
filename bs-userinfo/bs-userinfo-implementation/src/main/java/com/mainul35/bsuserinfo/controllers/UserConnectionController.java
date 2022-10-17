@@ -62,19 +62,19 @@ public class UserConnectionController implements IConnectionController {
     }
 
     @Override
-    public ResponseEntity<Stream<UserConnectionInfoResponse>> getConnectionRequests(String userId, Integer pageIxd, Integer itemsPerPage) {
+    public ResponseEntity<List<UserConnectionInfoResponse>> getConnectionRequests(String userId, Integer pageIxd, Integer itemsPerPage) {
         var list = userConnectionService.getAllConnectionRequests(userId, pageIxd, itemsPerPage);
         return ResponseEntity.ok(list);
     }
 
     @Override
-    public ResponseEntity<Stream<UserConnectionInfoResponse>> getBlockedConnections(String userId, Integer pageIxd, Integer itemsPerPage) {
+    public ResponseEntity<List<UserConnectionInfoResponse>> getBlockedConnections(String userId, Integer pageIxd, Integer itemsPerPage) {
         var list = userConnectionService.getAllBlockedConnections(userId, pageIxd, itemsPerPage);
         return ResponseEntity.ok(list);
     }
 
     @Override
-    public ResponseEntity<Stream<UserConnectionInfoResponse>> getConnectedUsers(String userId, Integer pageIxd, Integer itemsPerPage) {
+    public ResponseEntity<List<UserConnectionInfoResponse>> getConnectedUsers(String userId, Integer pageIxd, Integer itemsPerPage) {
         var list = userConnectionService.getAllAcceptedConnections(userId, pageIxd, itemsPerPage);
         return ResponseEntity.ok(list);
     }

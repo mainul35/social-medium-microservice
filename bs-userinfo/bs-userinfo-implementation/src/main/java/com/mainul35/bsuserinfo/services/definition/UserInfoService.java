@@ -8,10 +8,11 @@ import controllers.dtos.response.UserInfoResponse;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 public interface UserInfoService {
-    Stream<UserEntity> getUsers(Integer pageIxd, Integer itemsPerPage);
+    List<UserEntity> getUsers(Integer pageIxd, Integer itemsPerPage);
 
     void create(UserInfoRequest userInfoRequest);
 
@@ -19,7 +20,7 @@ public interface UserInfoService {
     @RabbitListener(queues = RabbitMQConfig.RMQ_NAME)
     void createUserConnections(String userId);
 
-    Stream<UserEntity> searchUser(Filter filter);
+    List<UserEntity> searchUser(Filter filter);
 
     UserInfoResponse getUserById(String id);
 }
