@@ -43,9 +43,9 @@ public class UserConnectionServiceImpl implements UserConnectionService {
     }
 
     private UserConnectionId getUserConnectionId(String userId, String connectionId) {
-        var user = userInfoRepository.findById(userId)
+        var user = userInfoRepository.findByUsername(userId)
                 .orElseThrow(() -> new NoContentException("No user found with this userId"));
-        var connection = userInfoRepository.findById(connectionId)
+        var connection = userInfoRepository.findByUsername(connectionId)
                 .orElseThrow(() -> new NoContentException("No user found to connect"));
         return new UserConnectionId(user, connection);
     }

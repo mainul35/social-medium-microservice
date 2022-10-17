@@ -5,10 +5,12 @@ import com.mainul35.bsuserinfo.entity.UserConnection;
 import com.mainul35.bsuserinfo.entity.UserConnectionId;
 import com.mainul35.bsuserinfo.entity.UserEntity;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.stream.Stream;
 
+@Repository
 public interface UserConnectionRepository extends PagingAndSortingRepository<UserConnection, UserConnectionId> {
     Optional<UserConnection> findByUserConnectionId(UserConnectionId userConnectionId);
     Stream<UserConnection> findByUserConnectionId_User(UserEntity user);

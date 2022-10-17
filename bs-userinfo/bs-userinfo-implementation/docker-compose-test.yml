@@ -25,37 +25,37 @@ services:
 #      - type: volume
 #        source: vol_userinfo
 #        target: "/home/mainul35/Documents/userinfo/static/resources"
-  userinfo_db:
+  userinfo_test_db:
     image: 'postgres'
-    container_name: 'userinfo_container'
+    container_name: 'userinfo_test_container'
     volumes:
       - type: volume
-        source: vol_userinfo
-        target: "/home/mainul35/Documents/userinfo_db_data"
+        source: vol_userinfo_test
+        target: "/home/mainul35/Documents/userinfo_test_db_data"
     ports:
-      - '5433:5432'
+      - '6433:5432'
     environment:
       - 'POSTGRES_PASSWORD=secret'
       - 'POSTGRES_USER=postgres'
-      - 'POSTGRES_DB=userinfo'
+      - 'POSTGRES_DB=userinfo_test'
     networks:
-      - social_medium_network
+      - social_medium_test_network
 #    extra_hosts:
 #      - 'social_medium_network:192.168.1.100'
-  rabbitmq:
+  rabbitmq_test:
     image: rabbitmq:3-management-alpine
-    container_name: rabbitmq
+    container_name: rabbitmq_test
     environment:
       RABBITMQ_DEFAULT_USER: social_community_user
       RABBITMQ_DEFAULT_PASS: secret
     ports:
-      - 5672:5672
-      - 15672:15672
+      - '6672:5672'
+      - '25672:15672'
     networks:
-      - social_medium_network
+      - social_medium_test_network
 volumes:
-  vol_userinfo:
+  vol_userinfo_test:
 networks:
-  social_medium_network:
-    name: social_medium_network
+  social_medium_test_network:
+    name: social_medium_test_network
     driver: bridge
