@@ -21,7 +21,7 @@ export class RequestsComponent implements OnInit {
     let userStr = localStorage.getItem("user");
     // @ts-ignore
     let loggedInUser: UserInfoModel = JSON.parse(userStr)
-    this.userInfoService.getConnectionRequests(loggedInUser?.id, this.currentPageIdx)
+    this.userInfoService.getConnectionRequests(loggedInUser?.username, this.currentPageIdx)
       .subscribe(value => {
         this.requests = value;
       })
@@ -33,9 +33,9 @@ export class RequestsComponent implements OnInit {
     // @ts-ignore
     let loggedInUser: UserInfoModel = JSON.parse(userStr)
     console.log(this.removableElement?.nativeElement)
-    this.userConnectionService.acceptConnection(idToAccept, loggedInUser?.id).subscribe(resp => {
+    this.userConnectionService.acceptConnection(idToAccept, loggedInUser?.username).subscribe(resp => {
       this.requests?.forEach(request => {
-        if (resp.body?.connection?.id === request?.connection?.id && resp.body?.status === "ACCEPTED") {
+        if (resp.body?.connection?.username === request?.connection?.username && resp.body?.status === "ACCEPTED") {
           this.removableElement?.nativeElement.getElementsByClassName(`removable-${request?.connection?.id}`)[0].parentElement.remove()
         }
       })
@@ -61,9 +61,9 @@ export class RequestsComponent implements OnInit {
     // @ts-ignore
     let loggedInUser: UserInfoModel = JSON.parse(userStr)
     console.log(this.removableElement?.nativeElement)
-    this.userConnectionService.rejectConnection(idToIgnore, loggedInUser?.id).subscribe(resp => {
+    this.userConnectionService.rejectConnection(idToIgnore, loggedInUser?.username).subscribe(resp => {
       this.requests?.forEach(request => {
-        if (resp.body?.connection?.id === request?.connection?.id && resp.body?.status === "REJECTED") {
+        if (resp.body?.connection?.username === request?.connection?.username && resp.body?.status === "REJECTED") {
           this.removableElement?.nativeElement.getElementsByClassName(`removable-${request?.connection?.id}`)[0].parentElement.remove()
         }
       })

@@ -22,7 +22,7 @@ export class BlockedComponent implements OnInit {
     let userStr = localStorage.getItem("user");
     // @ts-ignore
     let loggedInUser: UserInfoModel = JSON.parse(userStr)
-    this.userInfoService.getBlockedUsers(loggedInUser?.id, this.currentPageIdx)
+    this.userInfoService.getBlockedUsers(loggedInUser?.username, this.currentPageIdx)
       .subscribe(value => {
         this.blockedUserConnections = value;
       })
@@ -33,9 +33,9 @@ export class BlockedComponent implements OnInit {
     // @ts-ignore
     let loggedInUser: UserInfoModel = JSON.parse(userStr)
     console.log(this.removableElement?.nativeElement)
-    this.userConnectionService.unblockConnection(id, loggedInUser?.id).subscribe(resp => {
+    this.userConnectionService.unblockConnection(id, loggedInUser?.username).subscribe(resp => {
       this.blockedUserConnections?.forEach(blockedUserConnection => {
-        if (resp.body?.connection?.id === blockedUserConnection?.connection?.id && resp.body?.status === "UNBLOCKED") {
+        if (resp.body?.connection?.username === blockedUserConnection?.connection?.username && resp.body?.status === "UNBLOCKED") {
           this.removableElement?.nativeElement.getElementsByClassName(`removable-${blockedUserConnection?.connection?.id}`)[0].parentElement.remove()
         }
       })
