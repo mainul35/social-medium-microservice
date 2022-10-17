@@ -24,6 +24,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public static final String VALIDATION_ERROR = "validation_error";
     public static final String NO_CONTENT = "no_content";
 
+    public static final String DUPLICATE = "conflict";
+
     @ExceptionHandler(value = {RuntimeException.class})
     protected ResponseEntity<?> handleLimitReached(RuntimeException ex) {
         ErrorResponse response = new ErrorResponse(VALIDATION_ERROR, ex.getMessage());
@@ -36,6 +38,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponse response = new ErrorResponse(NO_CONTENT, ex.getMessage());
         this.printStackTrace(ex);
         return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+    }
+
+    @ExceptionHandler(value = {DuplicateEntryException.class})
+    protected ResponseEntity<?> handleDuplicateEntryException(DuplicateEntryException ex) {
+        ErrorResponse response = new ErrorResponse(DUPLICATE, ex.getMessage());
+        this.printStackTrace(ex);
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
 
     /**
