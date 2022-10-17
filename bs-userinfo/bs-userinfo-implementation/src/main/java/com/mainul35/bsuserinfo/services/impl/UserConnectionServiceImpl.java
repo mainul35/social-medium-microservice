@@ -105,41 +105,44 @@ public class UserConnectionServiceImpl implements UserConnectionService {
 
     @Override
     public Stream<UserConnectionInfoResponse> getAllConnectionRequests(String userId, Integer pageIxd, Integer itemsPerPage) {
-        var user = userInfoRepository.findById(userId)
+        var user = userInfoRepository.findByUsername(userId)
                 .orElseThrow(() -> new NoContentException("No user found with this user Id"));
         var stream1 = connectionRepository
                 .findAllByUserConnectionId_UserAndConnectionStatus(user, ConnectionStatus.REQUESTED);
         var stream2 = connectionRepository.findAllByUserConnectionId_ConnectionAndConnectionStatus(user, ConnectionStatus.REQUESTED);
-        return Stream.concat(stream1, stream2).parallel()
+        var list = Stream.concat(stream1, stream2).parallel()
                 .map(userConnection -> populateUserConnectionInfoResponseFromUserEntity(userConnection, user))
                 .filter(userConnection -> !userId.equals(userConnection.getRequestedById()))
-                .skip((long) (pageIxd - 1) * itemsPerPage).limit(itemsPerPage);
+                .skip((long) (pageIxd - 1) * itemsPerPage).limit(itemsPerPage).toList();
+        return list.stream();
     }
 
     @Override
     public Stream<UserConnectionInfoResponse> getAllBlockedConnections(String userId, Integer pageIxd, Integer itemsPerPage) {
-        var user = userInfoRepository.findById(userId)
+        var user = userInfoRepository.findByUsername(userId)
                 .orElseThrow(() -> new NoContentException("No user found with this user Id"));
         var stream1 = connectionRepository
                 .findAllByUserConnectionId_UserAndConnectionStatus(user, ConnectionStatus.BLOCKED);
         var stream2 = connectionRepository.findAllByUserConnectionId_ConnectionAndConnectionStatus(user, ConnectionStatus.BLOCKED);
-        return Stream.concat(stream1, stream2)
+        var list = Stream.concat(stream1, stream2)
                 .map(userConnection -> populateUserConnectionInfoResponseFromUserEntity(userConnection, user))
                 .filter(userConnection -> userId.equals(userConnection.getBlockedById()))
-                .skip((long) (pageIxd - 1) * itemsPerPage).limit(itemsPerPage);
+                .skip((long) (pageIxd - 1) * itemsPerPage).limit(itemsPerPage).toList();
+        return list.stream();
     }
 
     @Override
     public Stream<UserConnectionInfoResponse> getAllAcceptedConnections(String userId, Integer pageIxd, Integer itemsPerPage) {
-        var user = userInfoRepository.findById(userId)
+        var user = userInfoRepository.findByUsername(userId)
                 .orElseThrow(() -> new NoContentException("No user found with this user Id"));
         var stream1 = connectionRepository
                 .findAllByUserConnectionId_UserAndConnectionStatus(user, ConnectionStatus.ACCEPTED);
         var stream2 = connectionRepository.findAllByUserConnectionId_ConnectionAndConnectionStatus(user, ConnectionStatus.ACCEPTED);
-        return Stream.concat(stream1, stream2)
+        var list = Stream.concat(stream1, stream2)
                 .map(userConnection -> populateUserConnectionInfoResponseFromUserEntity(userConnection, user))
                 .filter(userConnection -> !userId.equals(userConnection.getRequestedById()))
-                .skip((long) (pageIxd - 1) * itemsPerPage).limit(itemsPerPage);
+                .skip((long) (pageIxd - 1) * itemsPerPage).limit(itemsPerPage).toList();
+        return list.stream();
     }
 
     @Deprecated
