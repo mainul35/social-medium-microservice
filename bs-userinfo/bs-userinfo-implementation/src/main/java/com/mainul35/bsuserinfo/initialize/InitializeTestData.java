@@ -46,13 +46,16 @@ public class InitializeTestData implements InitializeData {
     }
 
     private void addUsers() {
+        populateUsers(userRepository, resourceLoader, userInfoService);
+    }
 
+    static void populateUsers(UserInfoRepository userRepository, ResourceLoader resourceLoader, UserInfoServiceImpl userInfoService) {
         if (userRepository.count() < 1) {
             try {
-                List<UserInfoRequest> userModels = new ObjectMapper ()
+                List<UserInfoRequest> userModels = new ObjectMapper()
                         .readValue (
                                 resourceLoader.getResource ("classpath:users.json").getInputStream (),
-                                new TypeReference<ArrayList<UserInfoRequest>> () {
+                                new TypeReference<ArrayList<UserInfoRequest>>() {
                                 }
                         );
                 userModels.forEach (userInfoRequest -> {
@@ -63,6 +66,5 @@ public class InitializeTestData implements InitializeData {
                 e.printStackTrace ();
             }
         }
-
     }
 }

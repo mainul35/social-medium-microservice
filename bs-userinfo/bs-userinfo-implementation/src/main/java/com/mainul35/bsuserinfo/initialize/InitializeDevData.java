@@ -42,21 +42,6 @@ public class InitializeDevData implements InitializeData {
 
     private void addUsers() {
 
-        if (userRepository.count() < 1) {
-            try {
-                List<UserInfoRequest> userModels = new ObjectMapper ()
-                        .readValue (
-                                resourceLoader.getResource ("classpath:users.json").getInputStream (),
-                                new TypeReference<ArrayList<UserInfoRequest>> () {
-                                }
-                        );
-                userModels.forEach (userInfoRequest -> {
-                    userInfoRequest.setId(UUID.randomUUID().toString());
-                    userInfoService.create(userInfoRequest);
-                });
-            } catch (IOException e) {
-                e.printStackTrace ();
-            }
-        }
+        InitializeTestData.populateUsers(userRepository, resourceLoader, userInfoService);
     }
 }
