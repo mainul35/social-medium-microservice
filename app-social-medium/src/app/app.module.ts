@@ -18,7 +18,7 @@ import {NgbNavModule} from "@ng-bootstrap/ng-bootstrap";
 import { MutualTabsComponent } from './components/mutual-tabs/mutual-tabs.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
-import { BrowserUsersComponent } from './components/browser-users/browser-users.component';
+import { BrowseUsersComponent } from './components/browse-users/browse-users.component';
 import {LoginComponent} from "./components/login/login.component";
 import { HTTP_INTERCEPTORS } from '@angular/common/http';  
 import { TokenInterceptor } from './interceptors/TokenInterceptor';
@@ -38,7 +38,7 @@ import { TokenInterceptor } from './interceptors/TokenInterceptor';
     MutualTabsComponent,
     NotFoundComponent,
     HomepageComponent,
-    BrowserUsersComponent,
+    BrowseUsersComponent,
     LoginComponent
   ],
   imports: [
