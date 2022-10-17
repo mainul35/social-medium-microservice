@@ -2,15 +2,15 @@ package com.mainul35.bsuserinfo.services.impl;
 
 import com.mainul35.bsuserinfo.config.exceptions.DuplicateEntryException;
 import com.mainul35.bsuserinfo.config.rabbitmq.RabbitMQConfig;
-import controllers.dtos.enums.ConnectionStatus;
 import com.mainul35.bsuserinfo.entity.UserConnection;
 import com.mainul35.bsuserinfo.entity.UserConnectionId;
 import com.mainul35.bsuserinfo.entity.UserEntity;
-import controllers.dtos.enums.Field;
 import com.mainul35.bsuserinfo.exceptions.NoContentException;
 import com.mainul35.bsuserinfo.repositories.UserConnectionRepository;
 import com.mainul35.bsuserinfo.repositories.UserInfoRepository;
 import com.mainul35.bsuserinfo.services.definition.UserInfoService;
+import controllers.dtos.enums.ConnectionStatus;
+import controllers.dtos.enums.Field;
 import controllers.dtos.request.Filter;
 import controllers.dtos.request.UserInfoRequest;
 import controllers.dtos.response.UserInfoResponse;
@@ -29,7 +29,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 @Service
 @Slf4j
