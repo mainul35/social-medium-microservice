@@ -44,63 +44,63 @@ public class UserConnectionServiceImpl implements UserConnectionService {
 
     private UserConnectionId getUserConnectionId(String userId, String connectionId) {
         var user = userInfoRepository.findByUsername(userId)
-                .orElseThrow(() -> new NoContentException("No user found with this userId"));
+                .orElseThrow(() -> new NoContentException("No user found with this username"));
         var connection = userInfoRepository.findByUsername(connectionId)
                 .orElseThrow(() -> new NoContentException("No user found to connect"));
         return new UserConnectionId(user, connection);
     }
 
     @Override
-    public UserConnectionInfoResponse acceptConnection(String userId, String connectionId) {
+    public UserConnectionInfoResponse acceptConnection(String username, String connectionUsername) {
 
-        var userConnection = connectionRepository.findByUserConnectionId(getUserConnectionId(userId, connectionId))
-                .orElse(connectionRepository.findByUserConnectionId(getUserConnectionId(connectionId, userId)).orElse(null));
+        var userConnection = connectionRepository.findByUserConnectionId(getUserConnectionId(username, connectionUsername))
+                .orElse(connectionRepository.findByUserConnectionId(getUserConnectionId(connectionUsername, username)).orElse(null));
         if (Objects.isNull(userConnection)) {
             throw new NoContentException("No such connection request found");
         }
         userConnection.setConnectionStatus(ConnectionStatus.ACCEPTED);
         userConnection.setRequestedById(null);
         userConnection.setBlockedById(null);
-        return prepareUserConnectionResponse(connectionRepository.save(userConnection), userId) ;
+        return prepareUserConnectionResponse(connectionRepository.save(userConnection), username) ;
     }
 
     @Override
-    public UserConnectionInfoResponse rejectConnection(String userId, String connectionId) {
-        var userConnection = connectionRepository.findByUserConnectionId(getUserConnectionId(userId, connectionId))
-                .orElse(connectionRepository.findByUserConnectionId(getUserConnectionId(connectionId, userId)).orElse(null));
+    public UserConnectionInfoResponse rejectConnection(String username, String connectionUsername) {
+        var userConnection = connectionRepository.findByUserConnectionId(getUserConnectionId(username, connectionUsername))
+                .orElse(connectionRepository.findByUserConnectionId(getUserConnectionId(connectionUsername, username)).orElse(null));
         if (Objects.isNull(userConnection)) {
             throw new NoContentException("No such connection request found");
         }
         userConnection.setConnectionStatus(ConnectionStatus.REJECTED);
         userConnection.setRequestedById(null);
         userConnection.setBlockedById(null);
-        return prepareUserConnectionResponse(connectionRepository.save(userConnection), userId);
+        return prepareUserConnectionResponse(connectionRepository.save(userConnection), username);
     }
 
     @Override
-    public UserConnectionInfoResponse blockConnection(String userId, String connectionId) {
-        var userConnection = connectionRepository.findByUserConnectionId(getUserConnectionId(userId, connectionId))
-                .orElse(connectionRepository.findByUserConnectionId(getUserConnectionId(connectionId, userId)).orElse(null));
+    public UserConnectionInfoResponse blockConnection(String username, String connectionUsername) {
+        var userConnection = connectionRepository.findByUserConnectionId(getUserConnectionId(username, connectionUsername))
+                .orElse(connectionRepository.findByUserConnectionId(getUserConnectionId(connectionUsername, username)).orElse(null));
         if (Objects.isNull(userConnection)) {
             throw new NoContentException("No such connection request found");
         }
         userConnection.setConnectionStatus(ConnectionStatus.BLOCKED);
         userConnection.setRequestedById(null);
-        userConnection.setBlockedById(userId);
-        return prepareUserConnectionResponse(connectionRepository.save(userConnection), userId);
+        userConnection.setBlockedById(username);
+        return prepareUserConnectionResponse(connectionRepository.save(userConnection), username);
     }
 
     @Override
-    public UserConnectionInfoResponse unblockConnection(String userId, String connectionId) {
-        var userConnection = connectionRepository.findByUserConnectionId(getUserConnectionId(userId, connectionId))
-                .orElse(connectionRepository.findByUserConnectionId(getUserConnectionId(connectionId, userId)).orElse(null));
+    public UserConnectionInfoResponse unblockConnection(String username, String connectionUsername) {
+        var userConnection = connectionRepository.findByUserConnectionId(getUserConnectionId(username, connectionUsername))
+                .orElse(connectionRepository.findByUserConnectionId(getUserConnectionId(connectionUsername, username)).orElse(null));
         if (Objects.isNull(userConnection)) {
             throw new NoContentException("No such connection request found");
         }
         userConnection.setConnectionStatus(ConnectionStatus.UNBLOCKED);
         userConnection.setRequestedById(null);
         userConnection.setBlockedById(null);
-        return prepareUserConnectionResponse(connectionRepository.save(userConnection), userId);
+        return prepareUserConnectionResponse(connectionRepository.save(userConnection), username);
     }
 
     @Override
@@ -179,12 +179,12 @@ public class UserConnectionServiceImpl implements UserConnectionService {
     }
 
     private UserConnectionInfoResponse populateUserConnectionInfoResponseFromUserEntity(UserConnection userConnection, UserEntity userEntity) {
-        return prepareUserConnectionResponse(userConnection, userEntity.getId());
+        return prepareUserConnectionResponse(userConnection, userEntity.getUsername());
     }
 
-    private UserConnectionInfoResponse prepareUserConnectionResponse(UserConnection userConnection, String userId) {
+    private UserConnectionInfoResponse prepareUserConnectionResponse(UserConnection userConnection, String username) {
         UserConnectionInfoResponse response = new UserConnectionInfoResponse();
-        if(userConnection.getUserConnectionId().getUser().getId().equals(userId)) {
+        if(userConnection.getUserConnectionId().getUser().getUsername().equals(username)) {
             response.setUser(this.mapUserEntityToResponseDto(userConnection.getUserConnectionId().getUser()));
             response.setConnection(this.mapUserEntityToResponseDto(userConnection.getUserConnectionId().getConnection()));
         } else {

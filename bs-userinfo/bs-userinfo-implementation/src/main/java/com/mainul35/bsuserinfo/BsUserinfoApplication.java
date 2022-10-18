@@ -18,6 +18,6 @@ public class BsUserinfoApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-//        initializeData.initialize();
+        initializeData.initialize();
     }
 }
