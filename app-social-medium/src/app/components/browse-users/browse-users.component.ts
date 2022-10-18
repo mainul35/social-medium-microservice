@@ -9,8 +9,8 @@ import { debug } from 'console';
 
 @Component({
   selector: 'app-browser-users',
-  templateUrl: './browser-users.component.html',
-  styleUrls: ['./browser-users.component.scss']
+  templateUrl: './browse-users.component.html',
+  styleUrls: ['./browse-users.component.scss']
 })
 export class BrowseUsersComponent implements OnInit {
 
@@ -22,19 +22,17 @@ export class BrowseUsersComponent implements OnInit {
     let userStr = this.cookieService.get(AuthenticationService.USER_INFO);
     // @ts-ignore
     let loggedInUser: UserInfoModel = JSON.parse(userStr)
-    debugger
     this.userInfoService.getGlobalUsers(loggedInUser?.username, this.currentPageIdx)
       .subscribe(userConnections => {
-        debugger
         this.userConnections = userConnections
       })
   }
 
   addFriend(idToConnect ?: string) {
-    let userStr = localStorage.getItem("user");
+    let userStr = this.cookieService.get(AuthenticationService.USER_INFO);
     // @ts-ignore
     let loggedInUser: UserInfoModel = JSON.parse(userStr)
-    this.userConnectionService.connectWithUser(idToConnect, loggedInUser.id).subscribe(resp => {
+    this.userConnectionService.connectWithUser(idToConnect, loggedInUser.username).subscribe(resp => {
       this.userConnections?.forEach((userConnection) => {
         if ((userConnection.user?.id === resp.body?.user?.id && userConnection.connection?.id === resp.body?.connection?.id)
         || (userConnection.user?.id === resp.body?.connection?.id && userConnection.connection?.id === resp.body?.user?.id)) {
