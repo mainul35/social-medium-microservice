@@ -11,7 +11,7 @@
               <p>Email: {{userConnection?.connection?.email}}</p>
               <p class="text-muted">@Founder <span>| </span><span><a href="#" class="text-pink">websitename.com</a></span></p>
             </div>
-            <button *ngIf="!userConnection?.requestedById" type="button" class="btn btn-success mt-3 btn-rounded waves-effect w-md waves-light" (click)="addFriend(userConnection?.connection?.id)">Connect</button>
+            <button *ngIf="!userConnection?.requestedById" type="button" class="btn btn-success mt-3 btn-rounded waves-effect w-md waves-light" (click)="addFriend(userConnection?.connection?.username)">Connect</button>
             <button *ngIf="userConnection?.requestedById" type="button" class="btn btn-secondary mt-3 btn-rounded waves-effect w-md waves-light">Requested</button>
           </div>
         </div>

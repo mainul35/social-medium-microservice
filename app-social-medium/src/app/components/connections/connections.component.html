@@ -11,8 +11,8 @@
               <p>Email: {{userConnection?.connection?.email}}</p>
               <p class="text-muted">@Founder <span>| </span><span><a href="#" class="text-pink">websitename.com</a></span></p>
             </div>
-            <button type="button" class="btn btn-danger mt-3 btn-rounded waves-effect w-md waves-light" (click)="removeConnection(userConnection?.connection?.id)">Remove Connection</button>
-            <button type="button" class="btn btn-danger mt-3 btn-rounded waves-effect w-md waves-light" (click)="blockConnection(userConnection?.connection?.id)">Block Connection</button>
+            <button type="button" class="btn btn-danger mt-3 btn-rounded waves-effect w-md waves-light" (click)="removeConnection(userConnection?.connection?.username)">Remove Connection</button>
+            <button type="button" class="btn btn-danger mt-3 btn-rounded waves-effect w-md waves-light" (click)="blockConnection(userConnection?.connection?.username)">Block Connection</button>
           </div>
         </div>
       </div>

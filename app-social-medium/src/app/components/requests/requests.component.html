@@ -11,11 +11,11 @@
               <p>Email: {{requestedConnection?.connection?.email}}</p>
               <p class="text-muted">@Founder <span>| </span><span><a href="#" class="text-pink">websitename.com</a></span></p>
             </div>
-            <button type="button" class="btn btn-success mt-3 btn-rounded waves-effect w-md waves-light" (click)="acceptConnectionRequest(requestedConnection?.connection?.id)">Accept</button>
+            <button type="button" class="btn btn-success mt-3 btn-rounded waves-effect w-md waves-light" (click)="acceptConnectionRequest(requestedConnection?.connection?.username)">Accept</button>
             &nbsp;
-            <button type="button" class="btn btn-warning mt-3 btn-rounded waves-effect w-md waves-light" (click)="ignoreConnectionRequest(requestedConnection?.connection?.id)">Ignore</button>
+            <button type="button" class="btn btn-warning mt-3 btn-rounded waves-effect w-md waves-light" (click)="ignoreConnectionRequest(requestedConnection?.connection?.username)">Ignore</button>
             &nbsp;
-            <button type="button" class="btn btn-danger mt-3 btn-rounded waves-effect w-md waves-light" (click)="blockConnectionRequest(requestedConnection?.connection?.id)">Block</button>
+            <button type="button" class="btn btn-danger mt-3 btn-rounded waves-effect w-md waves-light" (click)="blockConnectionRequest(requestedConnection?.connection?.username)">Block</button>
           </div>
         </div>
       </div>

@@ -4,6 +4,8 @@ import {UserInfoModel} from "../../models/user-info.model";
 import {UserConnectionModel} from "../../models/user-connection.model";
 import {UserConnectionService} from "../../services/user-connection.service";
 import {RequestsComponent} from "../requests/requests.component";
+import { CookieService } from 'ngx-cookie-service';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
   selector: 'app-connections',
@@ -15,11 +17,11 @@ export class ConnectionsComponent implements OnInit {
   currentPageIdx = 1;
   @ViewChild('removable') private removableElement ?: ElementRef;
 
-  constructor(private userInfoService: UserInfoService, private userConnectionService: UserConnectionService) { }
+  constructor(private userInfoService: UserInfoService, private userConnectionService: UserConnectionService, private cookieService: CookieService) { }
 
   ngOnInit(): void {
 
-    let userStr = localStorage.getItem("user");
+    let userStr = this.cookieService.get(AuthenticationService.USER_INFO);
     // @ts-ignore
     let loggedInUser: UserInfoModel = JSON.parse(userStr)
     this.userInfoService.getConnectedUsers(loggedInUser?.username, this.currentPageIdx)
@@ -29,7 +31,7 @@ export class ConnectionsComponent implements OnInit {
   }
 
   removeConnection(id ?: string) {
-    let userStr = localStorage.getItem("user");
+    let userStr = this.cookieService.get(AuthenticationService.USER_INFO);
     // @ts-ignore
     let loggedInUser: UserInfoModel = JSON.parse(userStr)
     console.log(this.removableElement?.nativeElement)
@@ -43,7 +45,7 @@ export class ConnectionsComponent implements OnInit {
   }
 
   blockConnection(id ?: string) {
-    let userStr = localStorage.getItem("user");
+    let userStr = this.cookieService.get(AuthenticationService.USER_INFO);
     // @ts-ignore
     let loggedInUser: UserInfoModel = JSON.parse(userStr)
     console.log(this.removableElement?.nativeElement)
