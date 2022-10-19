@@ -7,6 +7,7 @@ import {FilterModel} from "../models/filter.model";
 import {UserConnectionModel} from "../models/user-connection.model";
 import { CookieService } from 'ngx-cookie-service';
 import { AuthenticationService } from './authentication.service';
+import { CreateUserRequest } from '../models/create-user-model';
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +36,7 @@ export class UserInfoService {
     return this.httpClient.get<UserConnectionModel[]>(environment.USERINFO_URL + "users/"+ id +"/non-connected-users?pageIdx=" + currentPageIdx + "&itemsPerPage=10");
   }
 
-  registerUser(obj: any): Observable<any> {
+  registerUser(obj: CreateUserRequest): Observable<any> {
     return this.httpClient.post<any>(environment.BASE_URL + "users/create", obj);
   }
 }

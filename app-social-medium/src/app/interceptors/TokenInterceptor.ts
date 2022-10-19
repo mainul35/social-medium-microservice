@@ -11,11 +11,11 @@ export class TokenInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         
-        if (request.url.includes('login') || request.url.includes('register')) {
+        if (request.url.includes('login') || request.url.includes('users/create')) {
             return next.handle(request);
         }
-
-        const userInfo = JSON.parse(this.cookieService.get(AuthenticationService.USER_INFO));
+        const userInfoStr = this.cookieService.get(AuthenticationService.USER_INFO);
+        const userInfo = JSON.parse(userInfoStr);
         const jwt = userInfo.jwtToken;
         
         // request.headers['headers'] = [{"Authorization": `Bearer ${jwt}`}]
