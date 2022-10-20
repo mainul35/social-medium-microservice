@@ -50,7 +50,6 @@ export class UserRegisterComponent implements OnInit {
     }
     this.loading = true;
     // @ts-ignore
-    debugger
     const authInfo = new AuthInfoModel();
     authInfo.username = this.form.value.username
     authInfo.password = this.form.value.password
@@ -66,7 +65,11 @@ export class UserRegisterComponent implements OnInit {
     createUserObj.userInfo = userInfo;
     this.userInfoService.registerUser(createUserObj)
       .subscribe( (value) => {
-          console.log(value)
+          this.loading = false
+          window.alert("Registration successful. Please check your email to verify.")
+        }, err => {
+          this.loading = false
+          window.alert("Registration failed")
         });
 
   }
