@@ -5,7 +5,6 @@ import {UserConnectionService} from "../../services/user-connection.service";
 import {UserConnectionModel} from "../../models/user-connection.model";
 import { CookieService } from 'ngx-cookie-service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { debug } from 'console';
 
 @Component({
   selector: 'app-browser-users',
