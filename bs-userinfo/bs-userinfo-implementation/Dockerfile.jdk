@@ -1,10 +1,7 @@
 FROM openjdk:17-alpine
 
-RUN apk add --no-cache binutils
-
 EXPOSE 8581:8581
 
 COPY ./target/bs-userinfo-implementation-*.jar ROOT.jar
 
 ENTRYPOINT ["java", "-jar", "ROOT.jar"]
-
