@@ -8,6 +8,7 @@ services:
       - '8581:8581'
     depends_on:
       - userinfo_db
+      - rabbitmq
     command: mvn clean spring-boot:run
     # Pass environment variables to the service
     environment:
