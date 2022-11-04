@@ -5,21 +5,18 @@ import com.mainul35.socialmedium.dto.request.CreateUserRequest;
 import com.mainul35.socialmedium.services.BSAuthService;
 import com.mainul35.socialmedium.services.BSUserInfoService;
 import controllers.dtos.request.Filter;
-import controllers.dtos.request.UserInfoRequest;
-import controllers.dtos.response.UserConnectionInfoResponse;
-import controllers.dtos.response.UserInfoResponse;
 import lombok.AllArgsConstructor;
-
-import org.springframework.core.ParameterizedTypeReference;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
+import java.time.Duration;
 
 @Component
 @AllArgsConstructor
+@Slf4j
 public class BSUserInfoHandler {
 
     private final BSUserInfoService bsUserInfoService;
@@ -108,6 +105,16 @@ public class BSUserInfoHandler {
         var requestMono = request.bodyToMono(CreateUserRequest.class);
         return requestMono.flatMap(createUserRequest -> bsUserInfoService
                 .createConnection(createUserRequest.userInfo())
+                        // Perform force-register
+                        // TODO: This code will be removed in stable version
+                        .doOnError(throwable -> {
+                            log.error(throwable.getMessage());
+                            var userAuthInfoDto = new UserAuthInfoDto();
+                            userAuthInfoDto.setUsername(createUserRequest.userInfo().getUsername());
+                            userAuthInfoDto.setPassword(createUserRequest.authInfo().getPassword());
+                            var authServerResp = authService.createAuthenticationInfo(userAuthInfoDto);
+                            authServerResp.flatMap(authInfoDto -> ServerResponse.ok().build()).block(Duration.ofMillis(100));
+                        })
                 .map(resp -> {
                     var userAuthInfoDto = new UserAuthInfoDto();
                     userAuthInfoDto.setUsername(createUserRequest.userInfo().getUsername());
