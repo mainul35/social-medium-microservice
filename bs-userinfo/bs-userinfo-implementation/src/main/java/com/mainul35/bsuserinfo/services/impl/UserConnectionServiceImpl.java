@@ -33,19 +33,19 @@ public class UserConnectionServiceImpl implements UserConnectionService {
     }
     @Transactional
     @Override
-    public UserConnection addConnection(String userId, String connectionId) {
-        var userConnection = connectionRepository.findByUserConnectionId(getUserConnectionId(userId, connectionId))
-                .orElse(connectionRepository.findByUserConnectionId(getUserConnectionId(connectionId, userId))
-                        .orElse(new UserConnection(getUserConnectionId(userId, connectionId), ConnectionStatus.REQUESTED)));
+    public UserConnection addConnection(String username, String connectionUsername) {
+        var userConnection = connectionRepository.findByUserConnectionId(getUserConnectionId(username, connectionUsername))
+                .orElse(connectionRepository.findByUserConnectionId(getUserConnectionId(connectionUsername, username))
+                        .orElse(new UserConnection(getUserConnectionId(username, connectionUsername), ConnectionStatus.REQUESTED)));
         userConnection.setConnectionStatus(ConnectionStatus.REQUESTED);
-        userConnection.setRequestedById(userId);
+        userConnection.setRequestedById(username);
         return connectionRepository.save(userConnection);
     }
 
-    private UserConnectionId getUserConnectionId(String userId, String connectionId) {
-        var user = userInfoRepository.findByUsername(userId)
+    private UserConnectionId getUserConnectionId(String username, String connectionUsername) {
+        var user = userInfoRepository.findByUsername(username)
                 .orElseThrow(() -> new NoContentException("No user found with this username"));
-        var connection = userInfoRepository.findByUsername(connectionId)
+        var connection = userInfoRepository.findByUsername(connectionUsername)
                 .orElseThrow(() -> new NoContentException("No user found to connect"));
         return new UserConnectionId(user, connection);
     }
@@ -104,41 +104,41 @@ public class UserConnectionServiceImpl implements UserConnectionService {
     }
 
     @Override
-    public List<UserConnectionInfoResponse> getAllConnectionRequests(String userId, Integer pageIxd, Integer itemsPerPage) {
-        var user = userInfoRepository.findByUsername(userId)
+    public List<UserConnectionInfoResponse> getAllConnectionRequests(String username, Integer pageIxd, Integer itemsPerPage) {
+        var user = userInfoRepository.findByUsername(username)
                 .orElseThrow(() -> new NoContentException("No user found with this user Id"));
         var stream1 = connectionRepository
                 .findAllByUserConnectionId_UserAndConnectionStatus(user, ConnectionStatus.REQUESTED);
         var stream2 = connectionRepository.findAllByUserConnectionId_ConnectionAndConnectionStatus(user, ConnectionStatus.REQUESTED);
         return Stream.concat(stream1, stream2).parallel()
                 .map(userConnection -> populateUserConnectionInfoResponseFromUserEntity(userConnection, user))
-                .filter(userConnection -> !userId.equals(userConnection.getRequestedById()))
+                .filter(userConnection -> !username.equals(userConnection.getRequestedById()))
                 .skip((long) (pageIxd - 1) * itemsPerPage).limit(itemsPerPage).toList();
     }
 
     @Override
-    public List<UserConnectionInfoResponse> getAllBlockedConnections(String userId, Integer pageIxd, Integer itemsPerPage) {
-        var user = userInfoRepository.findByUsername(userId)
+    public List<UserConnectionInfoResponse> getAllBlockedConnections(String username, Integer pageIxd, Integer itemsPerPage) {
+        var user = userInfoRepository.findByUsername(username)
                 .orElseThrow(() -> new NoContentException("No user found with this user Id"));
         var stream1 = connectionRepository
                 .findAllByUserConnectionId_UserAndConnectionStatus(user, ConnectionStatus.BLOCKED);
         var stream2 = connectionRepository.findAllByUserConnectionId_ConnectionAndConnectionStatus(user, ConnectionStatus.BLOCKED);
         return Stream.concat(stream1, stream2)
                 .map(userConnection -> populateUserConnectionInfoResponseFromUserEntity(userConnection, user))
-                .filter(userConnection -> userId.equals(userConnection.getBlockedById()))
+                .filter(userConnection -> username.equals(userConnection.getBlockedById()))
                 .skip((long) (pageIxd - 1) * itemsPerPage).limit(itemsPerPage).toList();
     }
 
     @Override
-    public List<UserConnectionInfoResponse> getAllAcceptedConnections(String userId, Integer pageIxd, Integer itemsPerPage) {
-        var user = userInfoRepository.findByUsername(userId)
+    public List<UserConnectionInfoResponse> getAllAcceptedConnections(String username, Integer pageIxd, Integer itemsPerPage) {
+        var user = userInfoRepository.findByUsername(username)
                 .orElseThrow(() -> new NoContentException("No user found with this user Id"));
         var stream1 = connectionRepository
                 .findAllByUserConnectionId_UserAndConnectionStatus(user, ConnectionStatus.ACCEPTED);
         var stream2 = connectionRepository.findAllByUserConnectionId_ConnectionAndConnectionStatus(user, ConnectionStatus.ACCEPTED);
         return Stream.concat(stream1, stream2)
                 .map(userConnection -> populateUserConnectionInfoResponseFromUserEntity(userConnection, user))
-                .filter(userConnection -> !userId.equals(userConnection.getRequestedById()))
+                .filter(userConnection -> !username.equals(userConnection.getRequestedById()))
                 .skip((long) (pageIxd - 1) * itemsPerPage).limit(itemsPerPage).toList();
     }
 
@@ -161,8 +161,8 @@ public class UserConnectionServiceImpl implements UserConnectionService {
      * */
     @Transactional
     @Override
-    public List<UserConnectionInfoResponse> getNonConnectedUsers(String id, Integer pageIxd, Integer itemsPerPage) {
-        var userOptional = userInfoRepository.findByUsername(id);
+    public List<UserConnectionInfoResponse> getNonConnectedUsers(String username, Integer pageIxd, Integer itemsPerPage) {
+        var userOptional = userInfoRepository.findByUsername(username);
         if(userOptional.isPresent()){
             var stream1 = connectionRepository.findByUserConnectionId_User(userOptional.get());
             var stream2 = connectionRepository.findByUserConnectionId_Connection(userOptional.get());

@@ -9,25 +9,25 @@ import java.util.stream.Stream;
 
 public interface UserConnectionService {
     @Transactional
-    UserConnection addConnection(String userId, String connectionId);
+    UserConnection addConnection(String username, String connectionUsername);
 
-    UserConnectionInfoResponse acceptConnection(String userId, String connectionId);
+    UserConnectionInfoResponse acceptConnection(String username, String connectionUsername);
 
-    UserConnectionInfoResponse rejectConnection(String userId, String connectionId);
+    UserConnectionInfoResponse rejectConnection(String username, String connectionUsername);
 
-    UserConnectionInfoResponse blockConnection(String userId, String connectionId);
+    UserConnectionInfoResponse blockConnection(String username, String connectionUsername);
 
-    UserConnectionInfoResponse unblockConnection(String userId, String connectionId);
-
-    @Transactional
-    List<UserConnectionInfoResponse> getAllConnectionRequests(String userId, Integer pageIxd, Integer itemsPerPage);
+    UserConnectionInfoResponse unblockConnection(String username, String connectionUsername);
 
     @Transactional
-    List<UserConnectionInfoResponse> getAllBlockedConnections(String userId, Integer pageIxd, Integer itemsPerPage);
+    List<UserConnectionInfoResponse> getAllConnectionRequests(String username, Integer pageIxd, Integer itemsPerPage);
 
     @Transactional
-    List<UserConnectionInfoResponse> getAllAcceptedConnections(String userId, Integer pageIxd, Integer itemsPerPage);
+    List<UserConnectionInfoResponse> getAllBlockedConnections(String username, Integer pageIxd, Integer itemsPerPage);
 
     @Transactional
-    List<UserConnectionInfoResponse> getNonConnectedUsers(String id, Integer pageIxd, Integer itemsPerPage);
+    List<UserConnectionInfoResponse> getAllAcceptedConnections(String username, Integer pageIxd, Integer itemsPerPage);
+
+    @Transactional
+    List<UserConnectionInfoResponse> getNonConnectedUsers(String username, Integer pageIxd, Integer itemsPerPage);
 }
