@@ -65,7 +65,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     @Transactional
     @RabbitListener(queues = RabbitMQConfig.RMQ_NAME)
-    public void createUserConnections(String userId) {
+    public synchronized void createUserConnections(String userId) {
         var savedUserOptional = userInfoRepository.findById(userId);
         log.debug("Receiving user object from Queue");
         savedUserOptional.ifPresent(savedUser -> userInfoRepository.findAllExceptUser(userId).forEach(user -> {
