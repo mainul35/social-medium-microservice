@@ -132,7 +132,7 @@ public class UserConnectionServiceImpl implements UserConnectionService {
     @Override
     public List<UserConnectionInfoResponse> getAllAcceptedConnections(String username, Integer pageIxd, Integer itemsPerPage) {
         var user = userInfoRepository.findByUsername(username)
-                .orElseThrow(() -> new NoContentException("No user found with this user Id"));
+                .orElseThrow(() -> new NoContentException("No user found with this username"));
         var stream1 = connectionRepository
                 .findAllByUserConnectionId_UserAndConnectionStatus(user, ConnectionStatus.ACCEPTED);
         var stream2 = connectionRepository.findAllByUserConnectionId_ConnectionAndConnectionStatus(user, ConnectionStatus.ACCEPTED);

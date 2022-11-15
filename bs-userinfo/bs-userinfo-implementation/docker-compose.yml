@@ -13,11 +13,12 @@ services:
     # Pass environment variables to the service
     environment:
       # The inside port will be used by the dependent services
-      SPRING_DATASOURCE_HOST: userinfo_db
-      SPRING_DATASOURCE_DB: userinfo
+      SPRING_DATASOURCE_URL: jdbc:postgresql://userinfo_db:5432/userinfo
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: secret
-      SPRING_DATASOURCE_DB_PORT: 5432
+      RMQ_HOST: rabbitmq
+      RMQ_USER: social_community_user
+      RMQ_PASSWORD: secret
       SERVER_PORT: 8581
       ACTIVE_PROFILE: dev
     networks:
@@ -42,7 +43,7 @@ services:
     networks:
       - social_medium_network
 #    extra_hosts:
-#      - 'social_medium_network:192.168.1.100'
+#      - 'social_medium_network:192.168.1.123'
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: rabbitmq
