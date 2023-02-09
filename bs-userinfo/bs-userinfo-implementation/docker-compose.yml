@@ -16,6 +16,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://userinfo_db:5432/userinfo
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: secret
+      DDL_AUTO: create-drop
       RMQ_HOST: rabbitmq
       RMQ_USER: social_community_user
       RMQ_PASSWORD: secret
