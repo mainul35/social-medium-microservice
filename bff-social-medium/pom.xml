@@ -12,6 +12,7 @@
     <description>bff-social-medium</description>
     <properties>
         <java.version>17</java.version>
+        <okhttp3.version>4.0.1</okhttp3.version>
     </properties>
     <dependencies>
 
@@ -44,6 +45,20 @@
             <artifactId>reactor-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>${okhttp3.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>mockwebserver</artifactId>
+            <version>${okhttp3.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>com.mainul35</groupId>
             <artifactId>bs-userinfo-definition</artifactId>

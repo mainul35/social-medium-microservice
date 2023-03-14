@@ -50,7 +50,7 @@ public class BSUserInfoService {
                .bodyToMono(new ParameterizedTypeReference<>() {});
     }
 
-    public Mono<?> acceptConnection(String userId, String connectionId) {
+    public Mono<UserConnectionInfoResponse> acceptConnection(String userId, String connectionId) {
         return webClient.put().uri(uriBuilder -> uriBuilder
                         .path(String.format("/%s/connections/accept/%s", userId, connectionId))
                         .build()
@@ -59,7 +59,7 @@ public class BSUserInfoService {
                 .bodyToMono(new ParameterizedTypeReference<>() {});
     }
 
-    public Mono<?> rejectConnection(String userId, String connectionId) {
+    public Mono<UserConnectionInfoResponse> rejectConnection(String userId, String connectionId) {
         return webClient.put().uri(uriBuilder -> uriBuilder
                         .path(String.format("/%s/connections/reject/%s", userId, connectionId))
                         .build()
@@ -68,7 +68,7 @@ public class BSUserInfoService {
                 .bodyToMono(new ParameterizedTypeReference<>() {});
     }
 
-    public Mono<?> blockConnection(String userId, String connectionId) {
+    public Mono<UserConnectionInfoResponse> blockConnection(String userId, String connectionId) {
         return webClient.put().uri(uriBuilder -> uriBuilder
                         .path(String.format("/%s/connections/block/%s", userId, connectionId))
                         .build()
@@ -77,7 +77,7 @@ public class BSUserInfoService {
                 .bodyToMono(new ParameterizedTypeReference<>() {});
     }
 
-    public Mono<?> unblockConnection(String userId, String connectionId) {
+    public Mono<UserConnectionInfoResponse> unblockConnection(String userId, String connectionId) {
         return webClient.put().uri(uriBuilder -> uriBuilder
                         .path(String.format("/%s/connections/unblock/%s", userId, connectionId))
                         .build()
