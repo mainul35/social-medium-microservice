@@ -119,11 +119,37 @@ public class BSUserInfoServiceTest {
     }
 
     @Test
-    void test_rejectConnection() {
+    void test_rejectConnection() throws JsonProcessingException {
+        response.setStatus(ConnectionStatus.REJECTED);
+        mockBackEnd.enqueue(new MockResponse()
+                .setBody(objectMapper.writeValueAsString(response))
+                .addHeader("Content-Type", "application/json"));
+
+        var userConnectionInfoResponseMono = bsUserInfoService.acceptConnection("1", "2");
+
+        StepVerifier.create(userConnectionInfoResponseMono)
+                .expectNextMatches(userConnectionInfoResponse ->
+                        userConnectionInfoResponse.getUser().getUsername().equals("mainul_1")
+                                && userConnectionInfoResponse.getConnection().getUsername().equals("mainul_2")
+                                && userConnectionInfoResponse.getStatus().equals(ConnectionStatus.REJECTED))
+                .verifyComplete();
     }
 
     @Test
-    void test_blockConnection() {
+    void test_blockConnection() throws JsonProcessingException {
+        response.setStatus(ConnectionStatus.BLOCKED);
+        mockBackEnd.enqueue(new MockResponse()
+                .setBody(objectMapper.writeValueAsString(response))
+                .addHeader("Content-Type", "application/json"));
+
+        var userConnectionInfoResponseMono = bsUserInfoService.acceptConnection("1", "2");
+
+        StepVerifier.create(userConnectionInfoResponseMono)
+                .expectNextMatches(userConnectionInfoResponse ->
+                        userConnectionInfoResponse.getUser().getUsername().equals("mainul_1")
+                                && userConnectionInfoResponse.getConnection().getUsername().equals("mainul_2")
+                                && userConnectionInfoResponse.getStatus().equals(ConnectionStatus.BLOCKED))
+                .verifyComplete();
     }
 
     @Test
