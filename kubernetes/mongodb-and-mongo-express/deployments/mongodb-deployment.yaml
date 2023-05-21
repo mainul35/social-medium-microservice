@@ -1,8 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: mongodb-deployment
   labels:
-    app: mongodb-server
+    app: mongodb-server-deployment
 spec:
   replicas: 2
   selector:
@@ -10,6 +11,7 @@ spec:
       pod: mongodb-server
   template:
     metadata:
+      name: mongodb-server
       labels:
         pod: mongodb-server
     spec:
