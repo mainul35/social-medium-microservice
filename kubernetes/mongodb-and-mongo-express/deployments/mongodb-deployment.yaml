@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: deployment
+metadata:
+  labels:
+    app: mongodb-server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      pod: mongodb-server
+    template:
+      apiVersion: v1
+      kind: Pod
+      metadata:
+        labels:
+          pod: mongodb-server
+      spec:
+        containers: mongodb-server
+        image: mongodb-server
+        imagePullPolicy: IfNotPresent
+        name: mongodb-server

@@ -25,16 +25,12 @@ services:
     networks:
       - social_medium_network
     volumes:
-      - type: volume
-        source: vol_userinfo
-        target: "/home/mainul35/Documents/userinfo/static/resources"
+      - ./data:/data
   userinfo_db:
     image: 'postgres'
     container_name: 'userinfo_container'
     volumes:
-      - type: volume
-        source: vol_userinfo
-        target: "/home/mainul35/Documents/userinfo_db_data"
+      - ./data:/data
     ports:
       - '5433:5432'
     environment:
@@ -56,8 +52,6 @@ services:
       - 15672:15672
     networks:
       - social_medium_network
-volumes:
-  vol_userinfo:
 networks:
   social_medium_network:
     name: social_medium_network
