@@ -32,3 +32,15 @@ spec:
                 name: mongo-secret
                 key: mongo-root-password
         imagePullPolicy: IfNotPresent
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service
+spec:
+  selector:
+    app: mongodb-server-deployment
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
