@@ -17,5 +17,5 @@ spec:
     spec:
       containers:
       - name: mongodb-server
-        image: mongodb-server
+        image: mongo
         imagePullPolicy: IfNotPresent
