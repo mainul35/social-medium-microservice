@@ -16,7 +16,7 @@ spec:
         pod: mongo-express-pod
     spec:
       containers:
-        - name: mongo-express-container
+        - name: mongo-express
           image: mongo-express
           ports:
             - containerPort: 8081
