@@ -1,14 +1,13 @@
 apiVersion: v1
-kind: PersistentVolume
+kind: PersistentVolumeClaim
 metadata:
-  name: rabbitmq-pv
+  name: bs-userinfo-rabbitmq-pvc
 spec:
-  capacity:
-    storage: 1Gi
   accessModes:
     - ReadWriteMany
-  hostPath:
-    path: /var/lib/rabbitmq
+  resources:
+    requests:
+      storage: 1Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -50,4 +49,4 @@ spec:
       volumes:
         - name: rabbitmq-data
           persistentVolumeClaim:
-            claimName: rabbitmq-pv
+            claimName: bs-userinfo-rabbitmq-pvc
