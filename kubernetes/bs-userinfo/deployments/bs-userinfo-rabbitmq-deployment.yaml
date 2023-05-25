@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: rabbitmq-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /var/lib/rabbitmq
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bs-userinfo-rabbitmq-deployment
+  labels:
+    deployment-name: bs-userinfo-rabbitmq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod-name: bs-userinfo-rabbitmq-pod
+  template:
+    metadata:
+      name: bs-userinfo-rabbitmq-pod
+      labels:
+        pod-name: bs-userinfo-rabbitmq-pod
+    spec:
+      containers:
+        - name: bs-userinfo-rabbitmq-container
+          image: rabbitmq:3-management-alpine
+          ports:
+            - containerPort: 5672
+            - containerPort: 15672
+          volumeMounts:
+            - name: rabbitmq-data
+              mountPath: /var/lib/rabbitmq
+          env:
+            - name: RABBITMQ_DEFAULT_USER
+              valueFrom:
+                secretKeyRef:
+                  key: bs-userinfo-rabbitmq-username
+                  name: bs-userinfo-secrets
+            - name: RABBITMQ_DEFAULT_PASS
+              valueFrom:
+                secretKeyRef:
+                  key: bs-userinfo-rabbitmq-password
+                  name: bs-userinfo-secrets
+      volumes:
+        - name: rabbitmq-data
+          persistentVolumeClaim:
+            claimName: rabbitmq-pv
