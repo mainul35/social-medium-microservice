@@ -7,6 +7,8 @@ import com.mainul35.auth.models.UserEntity;
 import com.mainul35.auth.repositories.RoleRepository;
 import com.mainul35.auth.repositories.UserRepository;
 import com.mainul35.auth.services.TokenService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,28 +22,24 @@ import java.util.List;
 @Component
 public class InitializeTestData implements InitializeData {
 
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-    private final RoleRepository roleRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
-    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private TokenService tokenService;
 
-    private final TokenService tokenService;
-
-    private final ResourceLoader resourceLoader;
-
-    public InitializeTestData(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, TokenService tokenService, ResourceLoader resourceLoader) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.tokenService = tokenService;
-        this.resourceLoader = resourceLoader;
-    }
+    @Autowired
+    private ResourceLoader resourceLoader;
 
     @Override
     public void initialize() {
         addRoles();
-//        addUsers();
+        addUsers();
     }
 
     private void addRoles() {

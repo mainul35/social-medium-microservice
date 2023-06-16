@@ -3,5 +3,6 @@ module bs.auth.definition {
     requires lombok;
     requires spring.boot.starter.data.jpa;
     requires spring.data.commons;
-    requires java.persistence;
+    requires jakarta.persistence;
+    requires org.hibernate.orm.core;
 }

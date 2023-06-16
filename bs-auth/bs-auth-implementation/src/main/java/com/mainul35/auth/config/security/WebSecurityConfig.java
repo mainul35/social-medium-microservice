@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
@@ -44,21 +45,24 @@ public class WebSecurityConfig {
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         var authManager = authenticationManagerBuilder.authenticationProvider(authenticationProvider).getOrBuild();
         return http
-                .sessionManagement ()
-                .sessionCreationPolicy (SessionCreationPolicy.STATELESS) // We don't need to create any session
-                .and ()
+                .sessionManagement (session ->
+                        session.sessionCreationPolicy (SessionCreationPolicy.STATELESS) // We don't need to create any session
+                )
                 .authenticationProvider (authenticationProvider)
                 .addFilterBefore (authFIlter(authManager), AnonymousAuthenticationFilter.class) // Will handle authentication
-                .authorizeRequests ()
-                .antMatchers ("/actuator/health").permitAll ()
-                .anyRequest()
-                .authenticated()
-                .and()
+                .authorizeHttpRequests (authorize ->
+                        authorize
+                                .requestMatchers ("/actuator/health").permitAll ()
+//                                .requestMatchers (new AntPathRequestMatcher ("/auth/user/**")).permitAll ()
+//                                .requestMatchers (new AntPathRequestMatcher ("/auth/token/**")).permitAll ()
+//                                .requestMatchers (new AntPathRequestMatcher ("/auth/role/**")).permitAll ()
+                                .anyRequest ().authenticated ()
+                )
                 // Disable unnecessary spring security features
-                .csrf().disable()
-                .httpBasic().disable()
-                .logout().disable()
-                .cors().and().build();
+                .csrf(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .logout(AbstractHttpConfigurer::disable)
+                .build();
     }
 
     public AuthFIlter authFIlter(AuthenticationManager authenticationManager) throws Exception {

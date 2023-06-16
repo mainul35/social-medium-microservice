@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-public class MarkdownAuthProvider extends AbstractUserDetailsAuthenticationProvider {
+public class AuthProvider extends AbstractUserDetailsAuthenticationProvider {
 
     @Autowired
     private UserRepository userRepository;
@@ -40,10 +40,10 @@ public class MarkdownAuthProvider extends AbstractUserDetailsAuthenticationProvi
         if (token.isEmpty()) {
             return new User(username, "", AuthorityUtils.createAuthorityList("ROLE_ANONYMOUS"));
         }
-        Optional<UserEntity> optionalMarkdownUserModel = userRepository.findByUsername(username);
+        Optional<UserEntity> optionalUserModel = userRepository.findByUsername(username);
 
-        if (optionalMarkdownUserModel.isPresent()) {
-            UserEntity markdownUserModel = optionalMarkdownUserModel.get();
+        if (optionalUserModel.isPresent()) {
+            UserEntity markdownUserModel = optionalUserModel.get();
             try {
                 tokenService.validateToken(markdownUserModel.getJwtToken());
             } catch (InvalidTokenException e) {
