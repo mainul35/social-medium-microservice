@@ -2,9 +2,9 @@ package com.mainul35.bsuserinfo.entity;
 
 import lombok.*;
 
-import javax.persistence.Embeddable;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import java.io.Serial;
 import java.io.Serializable;
 

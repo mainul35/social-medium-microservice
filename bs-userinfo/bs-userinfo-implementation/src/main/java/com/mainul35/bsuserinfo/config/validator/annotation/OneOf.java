@@ -3,8 +3,8 @@ package com.mainul35.bsuserinfo.config.validator.annotation;
 import com.mainul35.bsuserinfo.config.validator.OneOfValidator;
 import controllers.dtos.enums.Field;
 
-import javax.validation.Constraint;
-import javax.validation.Payload;
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 import java.lang.annotation.*;
 
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER})

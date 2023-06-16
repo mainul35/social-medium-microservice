@@ -14,6 +14,7 @@ import controllers.dtos.enums.Field;
 import controllers.dtos.request.Filter;
 import controllers.dtos.request.UserInfoRequest;
 import controllers.dtos.response.UserInfoResponse;
+import jakarta.persistence.criteria.Root;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -24,9 +25,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.Root;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.util.List;
 import java.util.UUID;
 
@@ -77,7 +77,7 @@ public class UserInfoServiceImpl implements UserInfoService {
                     userConnectionRepository.findByUserConnectionId(userConnection.getUserConnectionId())
                             .or(() -> userConnectionRepository.findByUserConnectionId(new UserConnectionId(user, savedUser)));
             if (fetchedUserConnection.isEmpty()) {
-                userConnectionRepository.save(userConnection);
+                userConnectionRepository.saveAndFlush(userConnection);
             }
         }));
     }

@@ -37,7 +37,7 @@ public class InitializeDevData implements InitializeData {
 
     @Override
     public void doCleanUp() {
-        userRepository.deleteAll ();
+//        userRepository.deleteAll ();
     }
 
     private void addUsers() {

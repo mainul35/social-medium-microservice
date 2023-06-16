@@ -81,7 +81,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.error(traceLines.toString());
     }
 
-    @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
         if (HttpStatus.INTERNAL_SERVER_ERROR.equals(status)) {
             request.setAttribute("javax.servlet.error.exception", ex, 0);

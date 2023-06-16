@@ -4,7 +4,7 @@ import controllers.dtos.enums.ConnectionStatus;
 import lombok.*;
 import org.hibernate.Hibernate;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Objects;
 
 @Getter

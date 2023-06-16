@@ -1,5 +1,6 @@
 package com.mainul35.bsuserinfo.config.exceptions;
 
+
 import lombok.Data;
 
 @Data

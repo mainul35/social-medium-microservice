@@ -9,7 +9,7 @@
 //import org.springframework.boot.test.context.SpringBootTest;
 //import org.springframework.context.ApplicationContext;
 //
-//import javax.validation.constraints.AssertTrue;
+//import jakarta.validation.constraints.AssertTrue;
 //
 //import static org.junit.jupiter.api.Assertions.*;
 //

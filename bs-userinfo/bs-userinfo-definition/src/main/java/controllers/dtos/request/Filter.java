@@ -4,7 +4,7 @@ import controllers.dtos.enums.Field;
 import lombok.Data;
 import validator.annotation.OneOf;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 @Data
 public class Filter {

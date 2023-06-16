@@ -3,8 +3,8 @@ package com.mainul35.bsuserinfo.config.validator;
 import com.mainul35.bsuserinfo.config.validator.annotation.OneOf;
 import controllers.dtos.enums.Field;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import java.util.Arrays;
 
 public class OneOfValidator implements ConstraintValidator<OneOf, String> {
