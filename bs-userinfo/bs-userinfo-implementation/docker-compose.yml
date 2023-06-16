@@ -39,8 +39,8 @@ services:
       - 'POSTGRES_DB=userinfo'
     networks:
       - social_medium_network
-#    extra_hosts:
-#      - 'social_medium_network:192.168.1.123'
+    extra_hosts:
+      - 'social_medium_network:192.168.238.2'
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: rabbitmq

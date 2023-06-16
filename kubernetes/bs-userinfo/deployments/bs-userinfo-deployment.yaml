@@ -1,0 +1,22 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: bs-userinfo
+  labels:
+    deployment-name: bs-userinfo-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod-name: bs-userinfo-pod
+  template:
+    metadata:
+      name: bs-userinfo
+      labels:
+        pod-name: bs-userinfo-pod
+    spec:
+      containers:
+        - name: bs-userinfo-container
+          image: bs-userinfo:1.0
+          ports:
+            - containerPort: 8581
